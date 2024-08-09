@@ -12,8 +12,7 @@ function Navbar() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between items-center p-8 ">
-
+    <div className="flex justify-between md:flex-row md:justify-between items-center p-8 ">
       <div className="font-bold text-2xl mb-4 md:mb-0">
         GLIDEGEAR
       </div>
@@ -45,7 +44,7 @@ function Navbar() {
 
 
       <div className="flex flex-col md:flex-row gap-6 text-slate-400 mt-4 md:mt-0">
-        <Link to="/contact" className="hover:text-black">
+        <Link to="/contact" className="hidden md:block hover:text-black">
           CONTACT
         </Link>
         <div className="flex items-center gap-6 text-2xl text-black">

@@ -1,19 +1,19 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import loginBg from "../../assets/loginshoe.jpeg";
-import { UserContext } from "../../App";
+
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function SignUp({ setCheckNav }) {
-  const { formData, setFormData } = useContext(UserContext);
+function SignUp() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setCheckNav(false);
-  }, [setCheckNav]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -56,7 +56,7 @@ function SignUp({ setCheckNav }) {
   }
 
   return (
-    <div className="h-screen w-full bg-blue-500 flex justify-center items-center">
+    <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-10">
       <form onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-2 place-content-center rounded-xl shadow-black shadow-lg">
           <div className="hidden md:flex justify-end h-[500px] w-[500px]">

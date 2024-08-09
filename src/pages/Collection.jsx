@@ -53,9 +53,9 @@ function Collection() {
   }
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 lg:p-16 xl:p-32">
+    <div className="p-4 sm:p-6 md:p-8 lg:p-16 xl:p-32 bg-gray-200">
       <div className="py-4 flex justify-between"><h1 className="text-2xl md:text-3xl font-bold ">All Products</h1>
-      <input className="border shadow-md h-12 w-52 border-gray-400 p-4" placeholder="Search Shoe" type="text" onChange={handleSearch} />
+      <input className="border shadow-md h-14 w-64 border-gray-400 p-4" placeholder="Search Shoe" type="text" onChange={handleSearch} />
       </div>
       {loading ? (
         <p>Loading...</p>
@@ -67,7 +67,7 @@ function Collection() {
                 <Link
                   to={`/product/${item.id}`}
                   key={item.id}
-                  className="relative bg-white shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 rounded-lg"
+                  className="relative bg-white shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 "
                 >
                   <img
                     src={item.image}

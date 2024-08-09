@@ -45,15 +45,14 @@ function WomenPage() {
 
   function handleSearch(e){
     setData(records.filter(value=>value.name.toLowerCase().includes(e.target.value.toLowerCase())))
-
   }
 
   return (
     <div className="p-4 sm:p-8 md:p-16 lg:p-32 bg-gray-200">
       <div className="py-4 flex justify-between"><h1 className="text-2xl md:text-3xl font-bold ">Women's Products</h1>
-      <input className="border shadow-md h-12 w-52 border-gray-400 p-4" placeholder="Search Shoe" type="text" onChange={handleSearch} />
+      <input className="border shadow-md h-14 w-64 border-gray-400 p-4" placeholder="Search Shoe" type="text" onChange={handleSearch} />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {paginatedProducts.map((product) => (
           <Link
             to={`/product/${product.id}`}
