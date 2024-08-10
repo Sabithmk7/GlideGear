@@ -11,6 +11,7 @@ function SignUp() {
     name: "",
     email: "",
     password: "",
+    cart:[]
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ function SignUp() {
     if (validateForm()) {
       toast.success("Signup Successfull");
       try {
+        
         const{confirmpassword,...newData}=formData
         await axios.post("http://localhost:3001/users", newData);
         navigate("/login");

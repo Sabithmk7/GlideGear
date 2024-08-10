@@ -7,7 +7,7 @@ function Collection() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
-  const[records,setRecords]=useState([])
+  const [records,setRecords]=useState([])
   const itemsPerPage = 10;
 
   useEffect(() => {

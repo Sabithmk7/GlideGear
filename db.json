@@ -16,11 +16,137 @@
     },
     {
       "id": "295b",
-      "newData": {
-        "name": "hello",
-        "email": "hello@gmail.com",
-        "password": "123"
-      },
+      "name": "hello",
+      "email": "hello@gmail.com",
+      "password": "123",
+      "cart": [
+        {
+          "id": "21",
+          "name": "Nike Air Max 270",
+          "brand": "Nike",
+          "price": 150,
+          "description": "Sneaker with a large Air Max unit for superior cushioning and comfort.",
+          "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/ab5d56d8-52b0-4d53-b237-4999e9f4f0c8/air-max-270-mens-shoes-v28d5j.png",
+          "category": "Men",
+          "sizes": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "colors": [
+            "Black",
+            "White",
+            "Red"
+          ],
+          "rating": 4.7
+        },
+        {
+          "id": "9",
+          "name": "Adidas Superstar",
+          "brand": "Adidas",
+          "price": 85,
+          "description": "Classic sneaker with a distinctive shell toe design.",
+          "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
+          "category": "Women",
+          "sizes": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "colors": [
+            "White",
+            "Black",
+            "Gold"
+          ],
+          "rating": 4.7,
+          "bestseller": true
+        },
+        {
+          "id": "7",
+          "name": "Nike Air Force 1",
+          "brand": "Nike",
+          "price": 89.99,
+          "description": "Timeless streetwear classic with a clean, minimalist design.",
+          "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/b73e3cb9-8dae-46bf-94d0-fb65f893aaf3/air-force-1-07-se-shoes-6WXgph.png",
+          "category": "Men",
+          "sizes": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "colors": [
+            "White",
+            "Black",
+            "Red"
+          ],
+          "rating": 4.6,
+          "bestseller": true
+        },
+        {
+          "id": "10",
+          "name": "Vans Old Skool",
+          "brand": "Vans",
+          "price": 65,
+          "description": "Iconic skate shoe with a simple and stylish design.",
+          "image": "https://images.vans.com/is/image/Vans/VN000D3H_Y28_HERO?wid=1600&hei=1984&fmt=jpeg&qlt=90&resMode=sharp2&op_usm=0.9,1.7,8,0",
+          "category": "Men",
+          "sizes": [
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "colors": [
+            "Black",
+            "White",
+            "Checkerboard"
+          ],
+          "rating": 4.4
+        },
+        {
+          "id": "11",
+          "name": "Brooks Ghost 14",
+          "brand": "Brooks",
+          "price": 140,
+          "description": "Comfortable running shoe with soft cushioning and smooth transitions.",
+          "image": "https://brooksrunningindia.com/cdn/shop/products/120380_152_L_Ghost_15.jpg?v=1685774262&width=900",
+          "category": "Men",
+          "sizes": [
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "colors": [
+            "Blue",
+            "Black",
+            "Grey"
+          ],
+          "rating": 4.7,
+          "bestseller": true
+        }
+      ]
+    },
+    {
+      "id": "7c10",
+      "name": "hello",
+      "email": "hello@gmail.com",
+      "password": "123",
+      "cart": []
+    },
+    {
+      "id": "943d",
+      "name": "he",
+      "email": "jhn@gmail.com",
+      "password": "12",
       "cart": []
     }
   ],

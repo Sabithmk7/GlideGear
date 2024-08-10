@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { handleAddCart } from "../Context/HandleCart";
 
 function ProductDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [products, setProducts] = useState(null);
+  const [product, setproduct] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/products/${id}`);
-        setProducts(res.data);
+        setproduct(res.data);
         setError(null);
       } catch (error) {
         setError("Error fetching product details");
@@ -30,11 +30,9 @@ function ProductDetails() {
         {error}
       </p>
     );
-  if (!products) return <p>Loading...</p>;
+  if (!product) return <p>Loading...</p>;
 
-  function handleNavigate() {
-    toast.success("Item added to cart")
-  }
+ 
 
   function handleBuy() {
     navigate("/buy-now");
@@ -46,20 +44,20 @@ function ProductDetails() {
         <div className="w-full md:w-auto mb-4 md:mb-0">
           <img
             className="shadow-lg h-[40vh] w-full md:h-[70vh] md:w-full object-contain transition-transform duration-300 hover:scale-110"
-            src={products.image}
-            alt={products.name}
+            src={product.image}
+            alt={product.name}
           />
         </div>
         <div className="w-full md:w-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-1">{products.name}</h1>
-          <p>{products.description}</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-1">{product.name}</h1>
+          <p>{product.description}</p>
           <div className="mt-3 text-gray-500">
-            <p>Category : {products.category}</p>
-            <p>Color : {products.colors[0]}</p>
-            <p>Rating : {products.rating}</p>
+            <p>Category : {product.category}</p>
+            <p>Color : {product.colors[0]}</p>
+            <p>Rating : {product.rating}</p>
           </div>
           <button
-            onClick={handleNavigate}
+            onClick={()=>handleAddCart(product)}
             className="border-gray-300 border-2 p-3 shadow-lg w-full mt-6"
           >
             Add to Cart

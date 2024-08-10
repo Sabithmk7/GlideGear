@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { UserContext } from "../../App";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { Link } from "react-router-dom";
@@ -11,20 +10,18 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setUser } = useContext(UserContext);
+  const { setUsers, users } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get("http://localhost:3001/users");
-      const users = response.data;
       const user = users.find(
-        (u) => u.email === email && u.password === password
+        (value) => value.email === email && value.password === password
       );
-
       if (user) {
-        setUser(user);
+        localStorage.setItem("id", user.id);
+        setUsers(user);
         toast.success("Login successful!");
         navigate("/");
       } else {
