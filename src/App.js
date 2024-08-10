@@ -11,15 +11,16 @@ import MenPage from "./pages/MenPage";
 import Footer from "./components/Footer";
 import WomenPage from "./pages/WomenPage";
 import Collection from "./pages/Collection";
-import BuyNow from "./pages/BuyNow";
 import axios from "axios";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 export const UserContext = createContext();
 
 function App() {
   const [users, setUsers] = useState([]);
   const [products, setproducts] = useState([]);
+  
 
   useEffect(() => {
     axios.get("http://localhost:3001/users")
@@ -34,6 +35,8 @@ function App() {
       .then((res) => setproducts(res.data));
   }, []);
 
+
+
   return (
     <Router>
       <Navbar />
@@ -47,7 +50,7 @@ function App() {
           <Route path="/men" element={<MenPage />} />
           <Route path="/women" element={<WomenPage />} />
           <Route path="/collections" element={<Collection />} />
-          <Route path="/buy-now" element={<BuyNow />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </UserContext.Provider>
       <ToastContainer />

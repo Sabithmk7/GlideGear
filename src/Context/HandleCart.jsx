@@ -23,3 +23,5 @@ export const handleAddCart = async (item) => {
     toast.warning("Please Login");
   }
 };
+
+

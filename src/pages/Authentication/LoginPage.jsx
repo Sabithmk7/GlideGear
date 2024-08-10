@@ -21,7 +21,7 @@ function LoginPage() {
       );
       if (user) {
         localStorage.setItem("id", user.id);
-        setUsers(user);
+        setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? user : u))); // Ensure context is updated
         toast.success("Login successful!");
         navigate("/");
       } else {
@@ -35,7 +35,7 @@ function LoginPage() {
 
   return (
     <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-10">
-      <div className="grid md:grid-cols-2 place-content-center rounded-xl shadow-black shadow-lg ">
+      <div className="grid md:grid-cols-2 place-content-center rounded-xl shadow-black shadow-lg">
         <div className="hidden md:flex justify-end h-[500px] w-[500px]">
           <img
             src={loginBg}

@@ -4,11 +4,8 @@ import { Link } from "react-router-dom";
 
 function Collection() {
   const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [records,setRecords]=useState([])
-  const itemsPerPage = 10;
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,16 +13,7 @@ function Collection() {
         setLoading(true);
         const res = await axios.get(`http://localhost:3001/products`);
         console.log("Fetched Data:", res.data);
-        const allData = res.data;
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const paginatedData = allData.slice(
-          startIndex,
-          startIndex + itemsPerPage
-        );
-        setRecords(paginatedData)
-        setData(paginatedData);
-        setTotalPages(Math.ceil(allData.length / itemsPerPage));
-
+        setData(res.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -34,40 +22,38 @@ function Collection() {
     };
 
     fetchData();
-  }, [currentPage]);
+  }, []);
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  function handleSearch(e){
-    setData(records.filter(value=>value.name.toLowerCase().includes(e.target.value.toLowerCase())))
-  }
+  const filteredData = data.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-16 xl:p-32 bg-gray-200">
-      <div className="py-4 flex justify-between"><h1 className="text-2xl md:text-3xl font-bold ">All Products</h1>
-      <input className="border shadow-md h-14 w-64 border-gray-400 p-4" placeholder="Search Shoe" type="text" onChange={handleSearch} />
+      <div className="py-4 flex justify-between">
+        <h1 className="text-2xl md:text-3xl font-bold">All Products</h1>
+        <input
+          className="border shadow-md h-14 w-64 border-gray-400 p-4"
+          placeholder="Search Shoe"
+          type="text"
+          onChange={handleSearch}
+        />
       </div>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {data.length > 0 ? (
-              data.map((item) => (
+            {filteredData.length > 0 ? (
+              filteredData.map((item) => (
                 <Link
                   to={`/product/${item.id}`}
                   key={item.id}
-                  className="relative bg-white shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 "
+                  className="relative bg-white shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105"
                 >
                   <img
                     src={item.image}
@@ -85,25 +71,6 @@ function Collection() {
             ) : (
               <p>No products available.</p>
             )}
-          </div>
-          <div className="flex justify-between mt-8">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg"
-            >
-              Previous
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg"
-            >
-              Next
-            </button>
           </div>
         </>
       )}
