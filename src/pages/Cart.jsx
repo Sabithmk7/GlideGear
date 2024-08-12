@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
+import { handleRemove } from "../Context/HandleCart";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -22,7 +23,7 @@ function Cart() {
         const initialQuantities = {};
         cartList.forEach((item) => {
           initialSizes[item.id] = item.sizes[0];
-          initialQuantities[item.id] = item.quantity || 1; // Set default quantity if not present
+          initialQuantities[item.id] = item.quantity || 1;
         });
         setSelectedSizes(initialSizes);
         setQuantities(initialQuantities);
@@ -53,29 +54,14 @@ function Cart() {
   };
 
   function handleCheckout() {
-    const totalAmount = calculateTotal(); // Calculate the total amount
+    const totalAmount = calculateTotal();
     navigate('/checkout', { state: { cartItems, selectedSizes, quantities, totalAmount } });
   }
 
-  async function handleRemove(item) {
-    try {
-      // Remove item from local state
-      const updatedCartItems = cartItems.filter(x => x.id !== item.id);
-      setCartItems(updatedCartItems);
-
-      // Get user ID
-      const userId = localStorage.getItem("id");
-
-      // Patch updated cart to backend
-      await axios.patch(`http://localhost:3001/users/${userId}`, {
-        cart: updatedCartItems
-      });
-
-      toast.success("Item removed from cart");
-    } catch (error) {
-      toast.warning("Failed to remove item from cart");
-      console.log(error);
-    }
+  function removeCart(item) {
+    const updatedCartItems = cartItems.filter(x => x.id !== item.id);
+    setCartItems(updatedCartItems);
+    handleRemove(item);
   }
 
   return (
@@ -134,7 +120,7 @@ function Cart() {
                   <p className="text-lg font-bold">Price: ${item.price * (quantities[item.id] || 1)}</p>
                 </div>
                 <div>
-                  <MdDelete onClick={() => handleRemove(item)} />
+                  <MdDelete onClick={() => removeCart(item)} />
                 </div>
               </li>
             ))}

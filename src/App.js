@@ -23,7 +23,8 @@ function App() {
   const [products, setproducts] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));
+    axios.get("http://localhost:3001/users")
+    .then((res) => setUsers(res.data));
   }, []);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ function App() {
       .then((res) => setproducts(res.data));
   }, []);
 
+  
   return (
     <Router>
       <Navbar />
@@ -46,7 +48,7 @@ function App() {
           <Route path="/women" element={<WomenPage />} />
           <Route path="/collections" element={<Collection />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/checkout" element={<Contact />} />
         </Routes>
       </UserContext.Provider>
       <ToastContainer />

@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../App";
 
 function MenPage() {
   const [data, setData] = useState([]);
   const [records, setRecords] = useState([]);
-
+  const {products}=useContext(UserContext)
+  
   useEffect(() => {
-    const fetchdata = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/products");
-        const menItems = res.data.filter(product => product.category === "Men");
-        setRecords(menItems);
-        setData(menItems);
-      } catch (error) {
-        console.error("Error fetching men's products:", error);
-      }
-    };
-
-    fetchdata();
-  }, []);
+    if (products) {
+      const filteredData = products.filter(product => product.category === "Men");
+      setData(filteredData);
+      setRecords(filteredData);
+    }
+  }, [products]);
 
   function handleSearch(e) {
     setData(records.filter(value => value.name.toLowerCase().includes(e.target.value.toLowerCase())));

@@ -10,7 +10,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setUsers, users } = useContext(UserContext);
+  const {  users } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -21,7 +21,6 @@ function LoginPage() {
       );
       if (user) {
         localStorage.setItem("id", user.id);
-        setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? user : u))); // Ensure context is updated
         toast.success("Login successful!");
         navigate("/");
       } else {

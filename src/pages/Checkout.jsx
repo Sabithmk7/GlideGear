@@ -11,14 +11,13 @@ function Checkout() {
   function handleChange(e) {
     const { name, value } = e.target;
     setOrderDetails({
-      ...orderDetails,
+      ...orderDetails,  
       [name]: value,
-      quanities:quantities,
       cartItemsId:cartItems.map(va=>va.id),
+      quanities:quantities,
       amount:totalAmount
     });
   }
-
   async function handleSubmit(e) {
     e.preventDefault();
     const requiredFields = ["fullName", "address", "city", "postalCode", "phoneNumber", "paymentMethod"];
@@ -30,9 +29,8 @@ function Checkout() {
     }
     try {
       const userId = localStorage.getItem("id");
-    
       await axios.patch(`http://localhost:3001/users/${userId}`, {
-        orderDetails: [...orderDetails],
+        orderDetails: orderDetails,
       });
       toast.success("Order Successful");
       setOrderDetails('')

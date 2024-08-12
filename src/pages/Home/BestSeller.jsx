@@ -1,25 +1,11 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../App";
 
 function BestSeller() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/products");
-        setData(res.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const bestsellers = data.filter(item => item.bestseller);
-
+  const{products}=useContext(UserContext)
+  const bestsellers = products.filter(item => item.bestseller);
   return (
     <div className="p-32">
       <h1 className="text-3xl font-bold py-4">Our Best Seller</h1>

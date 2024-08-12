@@ -1,28 +1,13 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../App";
 
 function Collection() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const { products } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(`http://localhost:3001/products`);
-        console.log("Fetched Data:", res.data);
-        setData(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  setData(products);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -43,37 +28,26 @@ function Collection() {
           onChange={handleSearch}
         />
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredData.length > 0 ? (
-              filteredData.map((item) => (
-                <Link
-                  to={`/product/${item.id}`}
-                  key={item.id}
-                  className="relative bg-white shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-48 md:h-56 lg:h-64 object-cover"
-                  />
-                  <div className="px-4 py-6">
-                    <h2 className="text-lg md:text-xl font-semibold">
-                      {item.name}
-                    </h2>
-                    <p className="text-gray-600 mt-2">${item.price}</p>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p>No products available.</p>
-            )}
-          </div>
-        </>
-      )}
+
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredData.map((item) => (
+          <Link
+            to={`/product/${item.id}`}
+            key={item.id}
+            className="relative bg-white shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105"
+          >
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-full h-48 md:h-56 lg:h-64 object-cover"
+            />
+            <div className="px-4 py-6">
+              <h2 className="text-lg md:text-xl font-semibold">{item.name}</h2>
+              <p className="text-gray-600 mt-2">${item.price}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

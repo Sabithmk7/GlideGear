@@ -7,14 +7,15 @@
       "password": "123",
       "cart": [
         {
-          "id": "8",
-          "name": "Puma RS-X",
-          "brand": "Puma",
-          "price": 110,
-          "description": "Bold and futuristic sneaker with a retro-inspired design.",
-          "image": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_500,h_500/global/381645/01/sv01/fnd/IND/fmt/png/RS---Z-Art-of-Sport-Unisex-Sneakers",
+          "id": "7",
+          "name": "Nike Air Force 1",
+          "brand": "Nike",
+          "price": 89.99,
+          "description": "Timeless streetwear classic with a clean, minimalist design.",
+          "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/b73e3cb9-8dae-46bf-94d0-fb65f893aaf3/air-force-1-07-se-shoes-6WXgph.png",
           "category": "Men",
           "sizes": [
+            7,
             8,
             9,
             10,
@@ -22,11 +23,12 @@
             12
           ],
           "colors": [
-            "Black",
             "White",
-            "Blue"
+            "Black",
+            "Red"
           ],
-          "rating": 4.5
+          "rating": 4.6,
+          "bestseller": true
         },
         {
           "id": "9",
@@ -52,7 +54,21 @@
           "bestseller": true
         }
       ],
-      "orderDetails": {}
+      "orderDetails": {
+        "fullName": "sda",
+        "quanities": {
+          "9": 1
+        },
+        "cartItemsId": [
+          "9"
+        ],
+        "amount": "85.00",
+        "address": "das",
+        "city": "ads",
+        "postalCode": "a",
+        "phoneNumber": "ds",
+        "paymentMethod": "Account"
+      }
     },
     {
       "id": "3a97",

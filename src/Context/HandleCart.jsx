@@ -7,12 +7,16 @@ export const handleAddCart = async (item) => {
     try {
       const res = await axios.get(`http://localhost:3001/users/${user}`);
       const currentCart = res.data.cart;
-      const itemExists = currentCart.find(cartItem => cartItem.id === item.id);
+      const itemExists = currentCart.find(
+        (cartItem) => cartItem.id === item.id
+      );
       if (itemExists) {
         toast.info("Item is already in the cart");
       } else {
         const updatedCart = [...currentCart, item];
-        await axios.patch(`http://localhost:3001/users/${user}`, { cart: updatedCart });
+        await axios.patch(`http://localhost:3001/users/${user}`, {
+          cart: updatedCart,
+        });
         toast.success("Item successfully added to cart");
       }
     } catch (error) {
@@ -24,4 +28,26 @@ export const handleAddCart = async (item) => {
   }
 };
 
+export const handleRemove = async (item) => {
+  const userId = localStorage.getItem("id");
+  if (!userId) {
+    toast.warning("Please Login");
+    return;
+  }
+  try {
+    const response = await axios.get(`http://localhost:3001/users/${userId}`);
+    const currentCart = response.data.cart;
 
+    const updatedCart = currentCart.filter(
+      (cartItem) => cartItem.id !== item.id
+    );
+
+    await axios.patch(`http://localhost:3001/users/${userId}`, {
+      cart: updatedCart,
+    });
+    toast.success("Item removed from cart");
+  } catch (error) {
+    toast.error("Failed to remove item from cart");
+    console.error(error);
+  }
+};

@@ -8,7 +8,7 @@ function HeroSection() {
         className="relative h-screen bg-cover bg-center mx-6"
         style={{ backgroundImage: `url(${shoeHero})` }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-start justify-center text-left p-14">
+        <div className="absolute inset-0  hover:bg-opacity-50 hover:bg-black flex flex-col items-start justify-center text-left p-14">
           <h1 className="text-4xl md:text-6xl text-white font-bold mb-8">
             Step Into Style
           </h1>

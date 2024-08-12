@@ -11,7 +11,6 @@ function SignUp() {
     name: "",
     email: "",
     password: "",
-    cart:[]
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -44,14 +43,12 @@ function SignUp() {
     if (validateForm()) {
       toast.success("Signup Successfull");
       try {
-        
         const{confirmpassword,...newData}=formData
         await axios.post("http://localhost:3001/users", newData);
         navigate("/login");
       } catch (error) {
         console.error("Error creating user:", error);
       }
-      
     } else {
       toast.error("Please fix the errors before submitting.");
     }
@@ -77,9 +74,7 @@ function SignUp() {
                 type="text"
                 name="name"
                 placeholder="Name"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  errors.name ? "border-red-500" : "focus:border-slate-400"
-                }`}
+                className={`border-b-2 p-2 focus:outline-none `}
                 onChange={handleChange}
               />
               {errors.name && (
@@ -90,9 +85,7 @@ function SignUp() {
                 type="text"
                 name="email"
                 placeholder="Email"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  errors.email ? "border-red-500" : "focus:border-slate-400"
-                }`}
+                className={`border-b-2 p-2 focus:outline-none `}
                 onChange={handleChange}
               />
               {errors.email && (
@@ -103,9 +96,7 @@ function SignUp() {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  errors.password ? "border-red-500" : "focus:border-slate-400"
-                }`}
+                className={`border-b-2 p-2 focus:outline-none `}
                 onChange={handleChange}
               />
               {errors.password && (
@@ -116,11 +107,7 @@ function SignUp() {
                 type="password"
                 name="confirmpassword"
                 placeholder="Confirm Password"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  errors.confirmpassword
-                    ? "border-red-500"
-                    : "focus:border-slate-400"
-                }`}
+                className={`border-b-2 p-2 focus:outline-none `}
                 onChange={handleChange}
               />
               {errors.confirmpassword && (
