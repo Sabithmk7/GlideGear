@@ -14,19 +14,16 @@ import Collection from "./pages/Collection";
 import axios from "axios";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Contact from "./pages/Contact";
 
 export const UserContext = createContext();
 
 function App() {
   const [users, setUsers] = useState([]);
   const [products, setproducts] = useState([]);
-  
 
   useEffect(() => {
-    axios.get("http://localhost:3001/users")
-      .then((res) => setUsers(res.data));
-      
-      
+    axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));
   }, []);
 
   useEffect(() => {
@@ -34,8 +31,6 @@ function App() {
       .get("http://localhost:3001/products")
       .then((res) => setproducts(res.data));
   }, []);
-
-
 
   return (
     <Router>
@@ -45,12 +40,13 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/cart" element={<Cart/>} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/men" element={<MenPage />} />
           <Route path="/women" element={<WomenPage />} />
           <Route path="/collections" element={<Collection />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </UserContext.Provider>
       <ToastContainer />

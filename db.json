@@ -51,7 +51,8 @@
           "rating": 4.7,
           "bestseller": true
         }
-      ]
+      ],
+      "orderDetails": {}
     },
     {
       "id": "3a97",

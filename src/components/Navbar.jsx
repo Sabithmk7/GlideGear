@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdAccountCircle, MdMenu, MdClose, MdLogout } from "react-icons/md";
+import { toast } from "react-toastify";
 
 function Navbar() {
   const [show, setshow] = useState(false);
@@ -20,6 +21,7 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("id");
+    toast.warn("Logged Out")
     setIsLoggedIn(false);
     navigate('/');
     // Optionally, force a page reload
