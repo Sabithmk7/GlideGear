@@ -13,7 +13,7 @@ function Checkout() {
     setOrderDetails({
       ...orderDetails,  
       [name]: value,
-      cartItemsId:cartItems.map(va=>va.id),
+      cartItemsId:cartItems.map(value=>value.id),
       quanities:quantities,
       amount:totalAmount
     });

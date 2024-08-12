@@ -10,9 +10,9 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is logged in by checking localStorage
-    const userId = localStorage.getItem("id");
-    setIsLoggedIn(!!userId);
+    if( localStorage.getItem("id")){
+      setIsLoggedIn(true);
+    }
   }, []);
 
   const toggleMenu = () => {
@@ -24,8 +24,6 @@ function Navbar() {
     toast.warn("Logged Out")
     setIsLoggedIn(false);
     navigate('/');
-    // Optionally, force a page reload
-    // window.location.reload();
   };
 
   return (
@@ -58,7 +56,6 @@ function Navbar() {
           </li>
         </ul>
       </div>
-
       <div className="flex flex-col md:flex-row gap-6 text-slate-400 mt-4 md:mt-0">
         <Link to="/contact" className="hidden md:block hover:text-black">
           CONTACT

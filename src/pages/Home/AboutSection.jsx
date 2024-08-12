@@ -1,7 +1,9 @@
 import React from 'react';
 import aboutImage from '../../assets/aboutImg.jpg'; 
+import { useNavigate } from 'react-router-dom';
 
 function AboutSection() {
+  const navigate=useNavigate()
   return (
     <div className="flex flex-col md:flex-row items-center py-12 px-20 ">
       <div className="flex-1 mb-6 md:mb-0 md:mr-8"> 
@@ -21,9 +23,9 @@ function AboutSection() {
         <p className="text-lg text-gray-600 mb-6 break-words">
           Nullam auctor faucibus ridiculus dignissim sed et auctor sed eget auctor nec sed elit nunc, magna non urna amet ac neque ut quam enim pretium risus gravida ullamcorper adipiscing at ut magna.
         </p>
-        <a href="#read-more" className="inline-block px-6 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-300">
+        <button onClick={()=>navigate('/contact')} className="inline-block px-6 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-300">
           Contact Us
-        </a>
+        </button>
       </div>
     </div>
   );

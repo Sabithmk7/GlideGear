@@ -48,7 +48,7 @@ function App() {
           <Route path="/women" element={<WomenPage />} />
           <Route path="/collections" element={<Collection />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/checkout" element={<Contact />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </UserContext.Provider>
       <ToastContainer />
