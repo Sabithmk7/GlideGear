@@ -1,62 +1,62 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import {  useNavigate } from "react-router-dom";
 import loginBg from "../../assets/loginshoe.jpeg";
-
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../../App";
 
 function SignUp() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const {users}=useContext(UserContext)
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  }
-
-  function validateForm() {
-    const { name, email, password, confirmpassword } = formData;
-    const errors = {};
-
-    if (!name) errors.name = "Name is required";
-    if (!email) errors.email = "Email is required";
-    if (!password) errors.password = "Password is required";
-    if (password !== confirmpassword)
-      errors.confirmpassword = "Passwords must match";
-
-    setErrors(errors);
-
-    return Object.keys(errors).length === 0;
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (validateForm()) {
-      toast.success("Signup Successfull");
-      try {
-        const{confirmpassword,...newData}=formData
-        await axios.post("http://localhost:3001/users", newData);
-        navigate("/login");
-      } catch (error) {
-        console.error("Error creating user:", error);
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmpassword: "",
+      cart: [],
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().min(2,'Too short').required("Name is required"),
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+      password: Yup
+    .string()
+    .required('Please Enter your password')
+    .matches(
+     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+    ),
+      confirmpassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Confirm Password is required"),
+    }),
+    onSubmit: async (values) => {
+      const email = users?.find((u) => u.email === values.email);
+      if (email) {
+        toast.error("Email already in use");
+      } else {
+        try {
+          const { confirmpassword, ...newData } = values;
+          await axios.post("http://localhost:3001/users", newData);
+          toast.success("Signup Successful", {
+            onClose: () => navigate("/login"),
+            autoClose: 1500,
+          });
+        } catch (error) {
+          console.error("Error creating user:", error);
+          toast.error("Error creating user");
+        }
       }
-    } else {
-      toast.error("Please fix the errors before submitting.");
     }
-  }
+  });
 
   return (
-    <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-10">
-      <form onSubmit={handleSubmit}>
+    <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-50">
+      <form onSubmit={formik.handleSubmit}>
         <div className="grid md:grid-cols-2 place-content-center rounded-xl shadow-black shadow-lg">
           <div className="hidden md:flex justify-end h-[500px] w-[500px]">
             <img
@@ -74,45 +74,61 @@ function SignUp() {
                 type="text"
                 name="name"
                 placeholder="Name"
-                className={`border-b-2 p-2 focus:outline-none `}
-                onChange={handleChange}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.name && formik.errors.name ? "border-red-500" : ""
+                }`}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
               />
-              {errors.name && (
-                <p className="text-red-500 text-sm">{errors.name}</p>
-              )}
+              {formik.touched.name && formik.errors.name ? (
+                <p className="text-red-500 text-sm">{formik.errors.name}</p>
+              ) : null}
 
               <input
                 type="text"
                 name="email"
                 placeholder="Email"
-                className={`border-b-2 p-2 focus:outline-none `}
-                onChange={handleChange}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.email && formik.errors.email ? "border-red-500" : ""
+                }`}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
-              )}
+              {formik.touched.email && formik.errors.email ? (
+                <p className="text-red-500 text-sm">{formik.errors.email}</p>
+              ) : null}
 
               <input
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`border-b-2 p-2 focus:outline-none `}
-                onChange={handleChange}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.password && formik.errors.password ? "border-red-500" : ""
+                }`}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
               />
-              {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
-              )}
+              {formik.touched.password && formik.errors.password ? (
+                <p className="text-red-500 text-sm">{formik.errors.password}</p>
+              ) : null}
 
               <input
                 type="password"
                 name="confirmpassword"
                 placeholder="Confirm Password"
-                className={`border-b-2 p-2 focus:outline-none `}
-                onChange={handleChange}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.confirmpassword && formik.errors.confirmpassword ? "border-red-500" : ""
+                }`}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.confirmpassword}
               />
-              {errors.confirmpassword && (
-                <p className="text-red-500 text-sm">{errors.confirmpassword}</p>
-              )}
+              {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
+                <p className="text-red-500 text-sm">{formik.errors.confirmpassword}</p>
+              ) : null}
 
               <div className="flex mt-10 items-center justify-between px-2">
                 <button
@@ -121,9 +137,15 @@ function SignUp() {
                 >
                   SignUp
                 </button>
-                <Link to="/login" className="text-blue-500">
+                <button
+                  onClick={() => {
+                    navigate("/login");
+                    window.location.reload();
+                  }}
+                  className="text-blue-500"
+                >
                   LogIn
-                </Link>
+                </button>
               </div>
             </div>
           </div>

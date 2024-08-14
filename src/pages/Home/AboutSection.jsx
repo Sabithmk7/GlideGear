@@ -21,7 +21,7 @@ function AboutSection() {
           Selected materials designed for comfort and sustainability
         </h3>
         <p className="text-lg text-gray-600 mb-6 break-words">
-          Nullam auctor faucibus ridiculus dignissim sed et auctor sed eget auctor nec sed elit nunc, magna non urna amet ac neque ut quam enim pretium risus gravida ullamcorper adipiscing at ut magna.
+        At Glidegear, we believe every step should be stylish and comfortable. With a passion for quality and design, we offer a curated selection of shoes for every lifestyle. From casual to performance, our collection ensures the perfect fit for any occasion. Committed to exceptional service, we aim to provide an unmatched shopping experience. Discover your perfect pair with us and step into a world of comfort and elegance.
         </p>
         <button onClick={()=>navigate('/contact')} className="inline-block px-6 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-300">
           Contact Us

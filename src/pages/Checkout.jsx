@@ -1,44 +1,54 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { toast } from "react-toastify";
 
-function Checkout() {
-  const [orderDetails, setOrderDetails] = useState({});
-  const location = useLocation();
-  const { cartItems, selectedSizes, quantities, totalAmount } = location.state;
+// Define the validation schema with yup
+const validationSchema = yup.object({
+  fullName: yup.string().required("Full name is required"),
+  address: yup.string().required("Address is required"),
+  city: yup.string().required("City is required"),
+  postalCode: yup.string().required("Postal code is required").min(6,"Minimum 6 digits required").max(6,'Maximum 6 digits'),
+  phoneNumber: yup.string().required("Phone number is required").min(10,'Minimum 10 digits required').max(10,'Maximum 10 digits'),
+  paymentMethod: yup.string().required("Payment method is required"),
+});
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setOrderDetails({
-      ...orderDetails,  
-      [name]: value,
-      cartItemsId:cartItems.map(value=>value.id),
-      quanities:quantities,
-      amount:totalAmount
-    });
-  }
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const requiredFields = ["fullName", "address", "city", "postalCode", "phoneNumber", "paymentMethod"];
-    for (const field of requiredFields) {
-      if (!orderDetails[field]) {
-        toast.error(`Please fill out the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
-        return;
+function Checkout() {
+  const location = useLocation();
+  const { cartItems, selectedSizes, quantities, totalPrice } = location.state;
+
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      phoneNumber: "",
+      paymentMethod: "",
+    },
+    validationSchema, 
+    onSubmit: async (values) => {
+      const orderDetails = {
+        ...values,
+        cartItemsId: cartItems.map((item) => item.id),
+        quantities,
+        amount: totalPrice,
+      };
+      try {
+        const userId = localStorage.getItem("id");
+        await axios.patch(`http://localhost:3001/users/${userId}`, {
+          orderDetails,
+        });
+        toast.success("Order Successful");
+        formik.resetForm();
+      } catch (error) {
+        console.log(error);
+        toast.error("Order failed");
       }
-    }
-    try {
-      const userId = localStorage.getItem("id");
-      await axios.patch(`http://localhost:3001/users/${userId}`, {
-        orderDetails: orderDetails,
-      });
-      toast.success("Order Successful");
-      setOrderDetails('')
-    } catch (error) {
-      console.log(error);
-      toast.error("Order failed");
-    }
-  }
+    },
+  });
 
   return (
     <div className="bg-gray-100 p-4 md:p-8 lg:p-16 flex flex-col lg:flex-row gap-8">
@@ -46,7 +56,7 @@ function Checkout() {
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Checkout Form</h1>
         <form
           className="bg-white shadow-lg p-6 space-y-6"
-          onSubmit={handleSubmit}
+          onSubmit={formik.handleSubmit}
         >
           <div>
             <label htmlFor="fullName" className="block font-semibold">
@@ -55,13 +65,17 @@ function Checkout() {
             <input
               id="fullName"
               name="fullName"
-              value={orderDetails.fullName}
-              onChange={handleChange}
               type="text"
               className="mt-2 p-2 border-2 w-full"
               placeholder="Enter your full name"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.fullName}
               required
             />
+            {formik.touched.fullName && formik.errors.fullName ? (
+              <div className="text-red-500 text-sm">{formik.errors.fullName}</div>
+            ) : null}
           </div>
           <div>
             <label htmlFor="address" className="block font-semibold">
@@ -70,13 +84,17 @@ function Checkout() {
             <input
               id="address"
               name="address"
-              value={orderDetails.address}
-              onChange={handleChange}
               type="text"
               className="mt-2 p-2 border-2 w-full"
               placeholder="Enter your address"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.address}
               required
             />
+            {formik.touched.address && formik.errors.address ? (
+              <div className="text-red-500 text-sm">{formik.errors.address}</div>
+            ) : null}
           </div>
           <div>
             <label htmlFor="city" className="block font-semibold">
@@ -85,13 +103,17 @@ function Checkout() {
             <input
               id="city"
               name="city"
-              value={orderDetails.city}
-              onChange={handleChange}
               type="text"
               className="mt-2 p-2 border-2 w-full"
               placeholder="Enter your city"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.city}
               required
             />
+            {formik.touched.city && formik.errors.city ? (
+              <div className="text-red-500 text-sm">{formik.errors.city}</div>
+            ) : null}
           </div>
           <div>
             <label htmlFor="postalCode" className="block font-semibold">
@@ -100,13 +122,17 @@ function Checkout() {
             <input
               id="postalCode"
               name="postalCode"
-              value={orderDetails.postalCode}
-              onChange={handleChange}
-              type="text"
+              type="number"
               className="mt-2 p-2 border-2 w-full"
               placeholder="Enter your postal code"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.postalCode}
               required
             />
+            {formik.touched.postalCode && formik.errors.postalCode ? (
+              <div className="text-red-500 text-sm">{formik.errors.postalCode}</div>
+            ) : null}
           </div>
           <div>
             <label htmlFor="phoneNumber" className="block font-semibold">
@@ -115,13 +141,17 @@ function Checkout() {
             <input
               id="phoneNumber"
               name="phoneNumber"
-              value={orderDetails.phoneNumber}
-              onChange={handleChange}
-              type="text"
+              type="number"
               className="mt-2 p-2 border-2 w-full"
               placeholder="Enter your phone number"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.phoneNumber}
               required
             />
+            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+              <div className="text-red-500 text-sm">{formik.errors.phoneNumber}</div>
+            ) : null}
           </div>
           <div className="flex flex-col gap-4">
             <span className="block font-semibold">Payment Options:</span>
@@ -131,8 +161,9 @@ function Checkout() {
                 name="paymentMethod"
                 type="radio"
                 value="UPI"
-                checked={orderDetails.paymentMethod === "UPI"}
-                onChange={handleChange}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                checked={formik.values.paymentMethod === "UPI"}
                 required
               />
               <label htmlFor="paymentUpi" className="ml-2">
@@ -145,8 +176,9 @@ function Checkout() {
                 name="paymentMethod"
                 type="radio"
                 value="Card"
-                checked={orderDetails.paymentMethod === "Card"}
-                onChange={handleChange}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                checked={formik.values.paymentMethod === "Card"}
                 required
               />
               <label htmlFor="paymentCard" className="ml-2">
@@ -159,8 +191,9 @@ function Checkout() {
                 name="paymentMethod"
                 type="radio"
                 value="Account"
-                checked={orderDetails.paymentMethod === "Account"}
-                onChange={handleChange}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                checked={formik.values.paymentMethod === "Account"}
                 required
               />
               <label htmlFor="paymentAccount" className="ml-2">
@@ -177,7 +210,6 @@ function Checkout() {
         </form>
       </div>
 
-      {/* Summary Section */}
       <div className="w-full md:w-1/3 lg:w-1/4">
         <div className="bg-white shadow-lg p-6">
           <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
@@ -208,7 +240,7 @@ function Checkout() {
             ))}
           </ul>
           <p className="border-t-2 border-gray-500 px-3 py-4 flex justify-between mt-6">
-            <span>Total</span> <span>${totalAmount}</span>
+            <span>Total</span> <span>${totalPrice}</span>
           </p>
         </div>
       </div>

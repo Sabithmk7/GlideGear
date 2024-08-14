@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { handleAddCart } from "../Context/HandleCart";
 
 function ProductDetails() {
-  const navigate = useNavigate();
+ 
   const { id } = useParams();
   const [product, setproduct] = useState();
 
@@ -23,9 +23,6 @@ function ProductDetails() {
 
   if (!product) return <p>Loading...</p>;
 
-  function handleBuy() {
-    navigate("/buy-now");
-  }
 
   return (
     <div className="bg-gray-200 p-4 md:p-8 flex justify-center items-center">
@@ -43,7 +40,7 @@ function ProductDetails() {
           </h1>
           <p>{product.description}</p>
           <div className="mt-3 text-gray-500">
-            <p className="text-black">Price : {product.price}</p>
+            <p className="text-black">Price : $ {product.price}</p>
             <p>Category : {product.category}</p>
             <p>Color : {product.colors[0]}</p>
             <p>Rating : {product.rating}</p>
@@ -53,12 +50,6 @@ function ProductDetails() {
             className="border-gray-300 border-2 p-3 shadow-lg w-full mt-6"
           >
             Add to Cart
-          </button>
-          <button
-            onClick={handleBuy}
-            className="border-gray-300 border-2 p-3 shadow-lg w-full mt-6"
-          >
-            Buy now
           </button>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import React from "react";
-import shoeHero  from '../../assets/HomeHero.jpg';
+import shoeHero  from '../../assets/homeImg.jpg'
+import { useNavigate } from "react-router-dom";
 
 function HeroSection() {
+  const navigate=useNavigate()
   return (
     <div>
       <div
@@ -13,15 +15,14 @@ function HeroSection() {
             Step Into Style
           </h1>
           <p className="text-lg md:text-1xl text-white mb-8 ">
-            Bibendum fermentum, aenean donec pretium aliquam blandit tempor<br/>
-            imperdiet arcu arcu ut nunc in dictum mauris at ut.
+          Elevate your style with our latest collection of sleek, comfortable shoes.<br/>  Designed for everyday wear,they offer the perfect blend of performance and <br/> modern aesthetics. Step confidently into any occasion with footwear that sets the pace.
           </p>
-          <button className="bg-white text-black px-6 py-3  hover:bg-gray-400 transition duration-300">
+          <button onClick={()=>navigate('/collections')} className="bg-white text-black px-6 py-3  hover:bg-gray-400 transition duration-300">
             SHOP NOW
           </button>
         </div>
       </div>
-    </div>
+    </div>  
   );
 }
 

@@ -15,7 +15,8 @@ function Cart() {
     async function displayCartItems() {
       try {
         const userId = localStorage.getItem("id");
-        const res = await axios.get(`http://localhost:3001/users/${userId}`);
+        if(userId){
+          const res = await axios.get(`http://localhost:3001/users/${userId}`);
         const cartList = res.data.cart;
         setCartItems(cartList);
 
@@ -27,6 +28,9 @@ function Cart() {
         });
         setSelectedSizes(initialSizes);
         setQuantities(initialQuantities);
+        }else{
+          toast.warn("Please Login")
+        }
       } catch (error) {
         toast.warning("Something went wrong");
         console.log(error);
@@ -49,17 +53,14 @@ function Cart() {
     }));
   };
 
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0).toFixed(2);
-  };
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0)
 
   function handleCheckout() {
-    const totalAmount = calculateTotal();
-    navigate('/checkout', { state: { cartItems, selectedSizes, quantities, totalAmount } });
+    navigate('/checkout', { state: { cartItems, selectedSizes, quantities, totalPrice } });
   }
 
   function removeCart(item) {
-    const updatedCartItems = cartItems.filter(x => x.id !== item.id);
+    const updatedCartItems = cartItems.filter(v => v.id !== item.id);
     setCartItems(updatedCartItems);
     handleRemove(item);
   }
@@ -133,7 +134,7 @@ function Cart() {
           <div className="bg-white shadow-lg p-6">
             <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
             <p className="border-b-2 border-gray-500 px-3 py-4 flex justify-between">
-              <span>Total</span> <span>${calculateTotal()}</span>
+              <span>Total</span> <span>${totalPrice}</span>
             </p>
             <button
               onClick={handleCheckout}

@@ -11,22 +11,22 @@ function LogoSection() {
       <img
         src={jordanBg}
         alt="Logo 1"
-        className="h-16 w-18 mb-4 hover:scale-110 transition-transform duration-300"
+        className="h-16 w-18 mb-4 "
       />
       <img
         src={pumaBg}
         alt="Logo 2"
-        className="h-16 w-18 mb-4 hover:scale-110 transition-transform duration-300"
+        className="h-16 w-18 mb-4 "
       />
       <img
         src={nbBg}
         alt="Logo 3"
-        className="h-16 w-18 mb-4 hover:scale-110 transition-transform duration-300"
+        className="h-16 w-18 mb-4 "
       />
       <img
         src={addidasBg}
         alt="Logo 4"
-        className="h-16 w-18 mb-4 hover:scale-110 transition-transform duration-300"
+        className="h-16 w-18 mb-4 "
       />
       <img
         src={nikeBg}

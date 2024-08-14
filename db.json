@@ -122,6 +122,173 @@
           "rating": 4.8
         }
       ]
+    },
+    {
+      "id": "227a",
+      "name": "sabith",
+      "email": "sabithmk32@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "8ff9",
+      "name": "Sabith",
+      "email": "s@gmail.com",
+      "password": "123",
+      "cart": [
+        {
+          "id": "12",
+          "name": "Hoka Bondi 8",
+          "brand": "Hoka",
+          "price": 160,
+          "description": "Maximum cushioning running shoe for a plush and comfortable ride.",
+          "image": "https://cdn.shopify.com/s/files/1/0087/8823/7956/products/1127953-BBSF_1_1200x1200.jpg?v=1676333381",
+          "category": "Women",
+          "sizes": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "colors": [
+            "Purple",
+            "Blue",
+            "Pink"
+          ],
+          "rating": 4.8
+        },
+        {
+          "id": "13",
+          "name": "Nike ZoomX Vaporfly NEXT%",
+          "brand": "Nike",
+          "price": 250,
+          "description": "High-performance racing shoe designed for speed and efficiency.",
+          "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/4fd9b582-9d72-4892-bd3f-b0fd89fcf0bb/zoomx-vaporfly-next-percent-road-racing-shoes-8cQQvS.png",
+          "category": "Women",
+          "sizes": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "colors": [
+            "Pink",
+            "Black",
+            "White"
+          ],
+          "rating": 4.9
+        }
+      ],
+      "orderDetails": {
+        "fullName": "sabith",
+        "cartItemsId": [
+          "7",
+          "9"
+        ],
+        "quanities": {
+          "7": 1,
+          "9": 1
+        },
+        "amount": 174.99,
+        "address": "house",
+        "city": "city",
+        "postalCode": "1234",
+        "phoneNumber": "920703",
+        "paymentMethod": "UPI"
+      }
+    },
+    {
+      "id": "56f8",
+      "name": "hello",
+      "email": "helo@gmail.com",
+      "password": "Sabith789!",
+      "cart": []
+    },
+    {
+      "id": "97a4",
+      "name": "asd",
+      "email": "sa@gmail.com",
+      "password": "SSSsss1!",
+      "cart": []
+    },
+    {
+      "id": "9092",
+      "name": "Hello",
+      "email": "hello@gmail.com",
+      "password": "Sabith789@",
+      "cart": []
+    },
+    {
+      "id": "6970",
+      "name": "das",
+      "email": "sabithmk323@gmail.com",
+      "password": "Sabith789@",
+      "cart": [
+        {
+          "id": "9",
+          "name": "Adidas Superstar",
+          "brand": "Adidas",
+          "price": 85,
+          "description": "Classic sneaker with a distinctive shell toe design.",
+          "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
+          "category": "Women",
+          "sizes": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "colors": [
+            "White",
+            "Black",
+            "Gold"
+          ],
+          "rating": 4.7,
+          "bestseller": true
+        }
+      ]
+    },
+    {
+      "id": "1242",
+      "name": "das",
+      "email": "das@gmail.com",
+      "password": "Sabith789@",
+      "cart": []
+    },
+    {
+      "id": "1557",
+      "name": "Sabith",
+      "email": "sabithmk33@gmail.com",
+      "password": "Sabith789!",
+      "cart": []
+    },
+    {
+      "id": "ba14",
+      "name": "Sabith",
+      "email": "sabithmk3@gmail.com",
+      "password": "Sabith789@",
+      "cart": []
+    },
+    {
+      "id": "0410",
+      "name": "Sabith",
+      "email": "sabithm323@gmail.com",
+      "password": "Sabith789!",
+      "cart": []
+    },
+    {
+      "id": "571b",
+      "name": "Sabith",
+      "email": "hell@gmail.com",
+      "password": "Hello789!",
+      "cart": []
+    },
+    {
+      "id": "953e",
+      "name": "Sabith",
+      "email": "sabithmk@gmail.com",
+      "password": "Sabith123!",
+      "cart": []
     }
   ],
   "products": [

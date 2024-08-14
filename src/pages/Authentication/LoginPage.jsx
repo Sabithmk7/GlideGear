@@ -1,39 +1,50 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const {  users } = useContext(UserContext);
+  const { users } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const user = users.find(
-        (value) => value.email === email && value.password === password
-      );
-      if (user) {
-        localStorage.setItem("id", user.id);
-        toast.success("Login successful!");
-        navigate("/");
-      } else {
-        setError("Invalid email or password");
-        toast.error("Invalid email or password");
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string().required("Required"),
+    }),
+    onSubmit: (values) => {
+      try {
+        const user = users.find(
+          u=>u.email === values.email && u.password === values.password
+        );
+        if (user) {
+          localStorage.setItem("id", user.id);
+          localStorage.setItem("name", user.name);
+          localStorage.setItem("email", user.email);
+          navigate("/");
+          toast.success("Login successful!");
+          window.location.reload();
+          
+        } else {
+          toast.error("Invalid email or password");
+        }
+      } catch (error) {
+        toast.error("Error fetching users");
       }
-    } catch (error) {
-      toast.error("Error fetching users");
-    }
-  };
+    },
+  });
 
   return (
-    <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-10">
+    <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-50">
       <div className="grid md:grid-cols-2 place-content-center rounded-xl shadow-black shadow-lg">
         <div className="hidden md:flex justify-end h-[500px] w-[500px]">
           <img
@@ -46,25 +57,34 @@ function LoginPage() {
           <h2 className="text-2xl font-bold text-center text-blue-500">
             LOGIN
           </h2>
-          <div className="flex flex-col gap-4">
+          <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
+              name="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="border-b-2 focus:border-slate-400 p-2 focus:outline-none"
             />
+            {formik.touched.email && formik.errors.email ? (
+              <p className="text-red-500">{formik.errors.email}</p>
+            ) : null}
             <input
               type="password"
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="border-b-2 focus:border-slate-400 p-2 focus:outline-none"
             />
-            {error && <p className="text-red-500">{error}</p>}
+            {formik.touched.password && formik.errors.password ? (
+              <p className="text-red-500">{formik.errors.password}</p>
+            ) : null}
             <div className="flex mt-10 items-center justify-between px-2">
               <button
-                onClick={handleLogin}
+                type="submit"
                 className="hover:bg-blue-600 bg-blue-500 text-white h-10 w-24"
               >
                 Login
@@ -73,9 +93,10 @@ function LoginPage() {
                 SignUp
               </Link>
             </div>
-          </div>
+          </form>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 }
