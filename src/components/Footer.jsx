@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaPinterestP } from 'react-icons/fa'; // Importing social media icons
+import { Link,} from 'react-router-dom';
 
 function Footer() {
   return (
@@ -10,7 +11,7 @@ function Footer() {
    
           <div className="flex-1 mb-8 md:mb-0 md:w-1/3">
             <p className="text-lg mb-4 leading-relaxed text-gray-300 mx-auto max-w-xs">
-              Praesent eget tortor sit risus egestas nulla pharetra ornare quis bibendum est bibendum sapien proin nascetur
+            At Glidegear, we blend style, comfort, and durability to create footwear that complements your look and supports every step, whether on the streets or the trail
             </p>
             <div className="flex space-x-4 mt-6 ml-20"> 
               <a href="#facebook" className="text-gray-400 hover:text-white">
@@ -34,9 +35,9 @@ function Footer() {
             <div className="mb-6 md:mb-0 w-full md:w-1/3">
               <h3 className="text-lg font-semibold mb-4">Shop</h3>
               <ul className="space-y-2">
-                <li><a href="#shop-men" className="hover:underline">Shop Men</a></li>
-                <li><a href="#shop-women" className="hover:underline">Shop Women</a></li>
-                <li><a href="#lookbook" className="hover:underline">Collection</a></li>
+                <li><Link to={'/men'} className="hover:underline">Shop Men</Link></li>
+                <li><Link to={'/women'} className="hover:underline">Shop Women</Link></li>
+                <li><Link to={'/collections'} className="hover:underline">Collection</Link></li>
               </ul>
             </div>
             <div className="mb-6 md:mb-0 w-full md:w-1/3">

@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 
-// Define the validation schema with yup
+
 const validationSchema = yup.object({
   fullName: yup.string().required("Full name is required"),
   address: yup.string().required("Address is required"),
@@ -30,16 +30,21 @@ function Checkout() {
     },
     validationSchema, 
     onSubmit: async (values) => {
-      const orderDetails = {
+      const orderId = `ORD-${Date.now()}`;
+      const newOrders = {
+        orderId,
         ...values,
-        cartItemsId: cartItems.map((item) => item.id),
         quantities,
         amount: totalPrice,
       };
+
       try {
         const userId = localStorage.getItem("id");
+        const res = await axios.get(`http://localhost:3001/users/${userId}`);
+        const orders = res.data.orders
+        const updatedOrders = [...orders, newOrders];
         await axios.patch(`http://localhost:3001/users/${userId}`, {
-          orderDetails,
+          orders: updatedOrders,
         });
         toast.success("Order Successful");
         formik.resetForm();

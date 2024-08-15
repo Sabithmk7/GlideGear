@@ -4,7 +4,6 @@ import * as yup from "yup";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 
-// Validation schema
 const validationSchema = yup.object({
   from_name: yup.string().required("Name is required"),
   user_email: yup.string().email("Invalid email format").required("Email is required"),
@@ -20,19 +19,16 @@ function Contact() {
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      console.log("Submitting form", values); // Log form values
       emailjs
         .sendForm("service_niluuxt", "template_v201iiq", "#contactForm", {
           publicKey: "vVyEa1ls4aehnS_Xs",
         })
         .then(
           (response) => {
-            console.log("EmailJS Response:", response); // Log EmailJS response
             toast.success("Successfully Sent");
             resetForm();
           },
           (error) => {
-            console.error("EmailJS Error:", error); // Log EmailJS error
             toast.error("Failed to send message");
           }
         );

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,7 +10,7 @@ import { UserContext } from "../../App";
 
 function SignUp() {
   const navigate = useNavigate();
-  const {users}=useContext(UserContext)
+  const { users, setUsers } = useContext(UserContext);
 
   const formik = useFormik({
     initialValues: {
@@ -19,33 +19,33 @@ function SignUp() {
       password: "",
       confirmpassword: "",
       cart: [],
+      orders: []
     },
     validationSchema: Yup.object({
-      name: Yup.string().min(2,'Too short').required("Name is required"),
+      name: Yup.string().min(2, 'Too short').required("Name is required"),
       email: Yup.string().email("Invalid email address").required("Email is required"),
-      password: Yup
-    .string()
-    .required('Please Enter your password')
-    .matches(
-     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
-    ),
+      password: Yup.string()
+        .required('Please Enter your password')
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+          "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        ),
       confirmpassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm Password is required"),
     }),
     onSubmit: async (values) => {
-      const email = users?.find((u) => u.email === values.email);
-      if (email) {
+      const isUser = users?.find((u) => u.email === values.email);
+      if (isUser) {
         toast.error("Email already in use");
       } else {
         try {
           const { confirmpassword, ...newData } = values;
           await axios.post("http://localhost:3001/users", newData);
-          toast.success("Signup Successful", {
-            onClose: () => navigate("/login"),
-            autoClose: 1500,
-          });
+          toast.success("Signup Successful");
+          setUsers(prevUsers => [...prevUsers, newData]);
+          setTimeout(() => navigate("/login"), 1500); 
+
         } catch (error) {
           console.error("Error creating user:", error);
           toast.error("Error creating user");
@@ -74,9 +74,7 @@ function SignUp() {
                 type="text"
                 name="name"
                 placeholder="Name"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  formik.touched.name && formik.errors.name ? "border-red-500" : ""
-                }`}
+                className={`border-b-2 p-2 focus:outline-none ${formik.touched.name && formik.errors.name ? "border-red-500" : ""}`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
@@ -89,9 +87,7 @@ function SignUp() {
                 type="text"
                 name="email"
                 placeholder="Email"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  formik.touched.email && formik.errors.email ? "border-red-500" : ""
-                }`}
+                className={`border-b-2 p-2 focus:outline-none ${formik.touched.email && formik.errors.email ? "border-red-500" : ""}`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
@@ -104,9 +100,7 @@ function SignUp() {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  formik.touched.password && formik.errors.password ? "border-red-500" : ""
-                }`}
+                className={`border-b-2 p-2 focus:outline-none ${formik.touched.password && formik.errors.password ? "border-red-500" : ""}`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
@@ -119,9 +113,7 @@ function SignUp() {
                 type="password"
                 name="confirmpassword"
                 placeholder="Confirm Password"
-                className={`border-b-2 p-2 focus:outline-none ${
-                  formik.touched.confirmpassword && formik.errors.confirmpassword ? "border-red-500" : ""
-                }`}
+                className={`border-b-2 p-2 focus:outline-none ${formik.touched.confirmpassword && formik.errors.confirmpassword ? "border-red-500" : ""}`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.confirmpassword}

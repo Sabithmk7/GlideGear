@@ -1,10 +1,106 @@
 {
   "users": [
     {
-      "id": "8566",
+      "id": "0ee7",
       "name": "Sabith",
-      "email": "sa",
-      "password": "123",
+      "email": "s@gmail.com",
+      "password": "Sabith789!",
+      "cart": [
+        {
+          "id": "8",
+          "name": "Puma RS-X",
+          "brand": "Puma",
+          "price": 110,
+          "description": "Bold and futuristic sneaker with a retro-inspired design.",
+          "image": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_500,h_500/global/381645/01/sv01/fnd/IND/fmt/png/RS---Z-Art-of-Sport-Unisex-Sneakers",
+          "category": "Men",
+          "sizes": [
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "colors": [
+            "Black",
+            "White",
+            "Blue"
+          ],
+          "rating": 4.5
+        }
+      ],
+      "orders": [
+        {
+          "orderId": "ORD-1723699548745",
+          "fullName": "sda",
+          "address": "dasdas",
+          "city": "dasda",
+          "postalCode": 123455,
+          "phoneNumber": 1232431233,
+          "paymentMethod": "Card",
+          "quantities": {
+            "9": 1
+          },
+          "amount": "85.00"
+        },
+        {
+          "orderId": "ORD-1723700344685",
+          "fullName": "dsa",
+          "address": "dasd",
+          "city": "dasd",
+          "postalCode": 123341,
+          "phoneNumber": 1234143231,
+          "paymentMethod": "Account",
+          "quantities": {
+            "9": 1
+          },
+          "amount": "85.00"
+        },
+        {
+          "orderId": "ORD-1723700396484",
+          "fullName": "das",
+          "address": "dsadas",
+          "city": "dasdsa",
+          "postalCode": 123442,
+          "phoneNumber": 1212388888,
+          "paymentMethod": "UPI",
+          "quantities": {
+            "8": "3",
+            "9": 1
+          },
+          "amount": "415.00"
+        }
+      ]
+    },
+    {
+      "id": "321b",
+      "name": "Hello",
+      "email": "helo@gmail.com",
+      "password": "Sabith789!",
+      "cart": [],
+      "orderDetails": []
+    },
+    {
+      "id": "885b",
+      "name": "Sabith",
+      "email": "Sabith789@gmail.com",
+      "password": "Sabith789!",
+      "cart": [],
+      "orderDetails": []
+    },
+    {
+      "id": "a26d",
+      "name": "das",
+      "email": "das@gmail.com",
+      "password": "Sabith789!",
+      "cart": [],
+      "orderDetails": []
+    },
+    {
+      "id": "ac59",
+      "name": "test",
+      "email": "test@gmail.com",
+      "password": "Test789!",
       "cart": [
         {
           "id": "7",
@@ -29,266 +125,23 @@
           ],
           "rating": 4.6,
           "bestseller": true
-        },
-        {
-          "id": "9",
-          "name": "Adidas Superstar",
-          "brand": "Adidas",
-          "price": 85,
-          "description": "Classic sneaker with a distinctive shell toe design.",
-          "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
-          "category": "Women",
-          "sizes": [
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
-          "colors": [
-            "White",
-            "Black",
-            "Gold"
-          ],
-          "rating": 4.7,
-          "bestseller": true
         }
       ],
-      "orderDetails": {
-        "fullName": "sda",
-        "quanities": {
-          "9": 1
-        },
-        "cartItemsId": [
-          "9"
-        ],
-        "amount": "85.00",
-        "address": "das",
-        "city": "ads",
-        "postalCode": "a",
-        "phoneNumber": "ds",
-        "paymentMethod": "Account"
-      }
-    },
-    {
-      "id": "3a97",
-      "name": "s",
-      "email": "s",
-      "password": "1",
-      "cart": [
+      "orders": [
         {
-          "id": "9",
-          "name": "Adidas Superstar",
-          "brand": "Adidas",
-          "price": 85,
-          "description": "Classic sneaker with a distinctive shell toe design.",
-          "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
-          "category": "Women",
-          "sizes": [
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
-          "colors": [
-            "White",
-            "Black",
-            "Gold"
-          ],
-          "rating": 4.7,
-          "bestseller": true
-        },
-        {
-          "id": "16",
-          "name": "Asics Gel-Kayano 28",
-          "brand": "Asics",
-          "price": 160,
-          "description": "High-performance running shoe with gel cushioning and stability.",
-          "image": "https://www.asics.com/media/export/cms/uk_en/g1_asics.com/800x800-021023_GEL-KAYANO_28.jpg",
-          "category": "Women",
-          "sizes": [
-            8,
-            9,
-            10,
-            11,
-            12
-          ],
-          "colors": [
-            "Black",
-            "White",
-            "Blue"
-          ],
-          "rating": 4.8
+          "orderId": "ORD-1723741102182",
+          "fullName": "da",
+          "address": "das",
+          "city": "dasd",
+          "postalCode": 123455,
+          "phoneNumber": 1234567890,
+          "paymentMethod": "Card",
+          "quantities": {
+            "8": "4"
+          },
+          "amount": "440.00"
         }
       ]
-    },
-    {
-      "id": "227a",
-      "name": "sabith",
-      "email": "sabithmk32@gmail.com",
-      "password": "12345678"
-    },
-    {
-      "id": "8ff9",
-      "name": "Sabith",
-      "email": "s@gmail.com",
-      "password": "123",
-      "cart": [
-        {
-          "id": "12",
-          "name": "Hoka Bondi 8",
-          "brand": "Hoka",
-          "price": 160,
-          "description": "Maximum cushioning running shoe for a plush and comfortable ride.",
-          "image": "https://cdn.shopify.com/s/files/1/0087/8823/7956/products/1127953-BBSF_1_1200x1200.jpg?v=1676333381",
-          "category": "Women",
-          "sizes": [
-            6,
-            7,
-            8,
-            9
-          ],
-          "colors": [
-            "Purple",
-            "Blue",
-            "Pink"
-          ],
-          "rating": 4.8
-        },
-        {
-          "id": "13",
-          "name": "Nike ZoomX Vaporfly NEXT%",
-          "brand": "Nike",
-          "price": 250,
-          "description": "High-performance racing shoe designed for speed and efficiency.",
-          "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/4fd9b582-9d72-4892-bd3f-b0fd89fcf0bb/zoomx-vaporfly-next-percent-road-racing-shoes-8cQQvS.png",
-          "category": "Women",
-          "sizes": [
-            8,
-            9,
-            10,
-            11
-          ],
-          "colors": [
-            "Pink",
-            "Black",
-            "White"
-          ],
-          "rating": 4.9
-        }
-      ],
-      "orderDetails": {
-        "fullName": "sabith",
-        "cartItemsId": [
-          "7",
-          "9"
-        ],
-        "quanities": {
-          "7": 1,
-          "9": 1
-        },
-        "amount": 174.99,
-        "address": "house",
-        "city": "city",
-        "postalCode": "1234",
-        "phoneNumber": "920703",
-        "paymentMethod": "UPI"
-      }
-    },
-    {
-      "id": "56f8",
-      "name": "hello",
-      "email": "helo@gmail.com",
-      "password": "Sabith789!",
-      "cart": []
-    },
-    {
-      "id": "97a4",
-      "name": "asd",
-      "email": "sa@gmail.com",
-      "password": "SSSsss1!",
-      "cart": []
-    },
-    {
-      "id": "9092",
-      "name": "Hello",
-      "email": "hello@gmail.com",
-      "password": "Sabith789@",
-      "cart": []
-    },
-    {
-      "id": "6970",
-      "name": "das",
-      "email": "sabithmk323@gmail.com",
-      "password": "Sabith789@",
-      "cart": [
-        {
-          "id": "9",
-          "name": "Adidas Superstar",
-          "brand": "Adidas",
-          "price": 85,
-          "description": "Classic sneaker with a distinctive shell toe design.",
-          "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
-          "category": "Women",
-          "sizes": [
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
-          "colors": [
-            "White",
-            "Black",
-            "Gold"
-          ],
-          "rating": 4.7,
-          "bestseller": true
-        }
-      ]
-    },
-    {
-      "id": "1242",
-      "name": "das",
-      "email": "das@gmail.com",
-      "password": "Sabith789@",
-      "cart": []
-    },
-    {
-      "id": "1557",
-      "name": "Sabith",
-      "email": "sabithmk33@gmail.com",
-      "password": "Sabith789!",
-      "cart": []
-    },
-    {
-      "id": "ba14",
-      "name": "Sabith",
-      "email": "sabithmk3@gmail.com",
-      "password": "Sabith789@",
-      "cart": []
-    },
-    {
-      "id": "0410",
-      "name": "Sabith",
-      "email": "sabithm323@gmail.com",
-      "password": "Sabith789!",
-      "cart": []
-    },
-    {
-      "id": "571b",
-      "name": "Sabith",
-      "email": "hell@gmail.com",
-      "password": "Hello789!",
-      "cart": []
-    },
-    {
-      "id": "953e",
-      "name": "Sabith",
-      "email": "sabithmk@gmail.com",
-      "password": "Sabith123!",
-      "cart": []
     }
   ],
   "products": [

@@ -10,9 +10,6 @@ function Collection() {
     setData(products);
   },[products])
 
- 
-
-  
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-16 xl:p-32 bg-gray-200">
       <div className="py-4 flex justify-between">

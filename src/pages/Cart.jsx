@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
+import Swal from "sweetalert2";
 import { handleRemove } from "../Context/HandleCart";
 
 function Cart() {
@@ -15,21 +16,21 @@ function Cart() {
     async function displayCartItems() {
       try {
         const userId = localStorage.getItem("id");
-        if(userId){
+        if (userId) {
           const res = await axios.get(`http://localhost:3001/users/${userId}`);
-        const cartList = res.data.cart;
-        setCartItems(cartList);
+          const cartList = res.data.cart;
+          setCartItems(cartList);
 
-        const initialSizes = {};
-        const initialQuantities = {};
-        cartList.forEach((item) => {
-          initialSizes[item.id] = item.sizes[0];
-          initialQuantities[item.id] = item.quantity || 1;
-        });
-        setSelectedSizes(initialSizes);
-        setQuantities(initialQuantities);
-        }else{
-          toast.warn("Please Login")
+          const initialSizes = {};
+          const initialQuantities = {};
+          cartList.forEach((item) => {
+            initialSizes[item.id] = item.sizes[0];
+            initialQuantities[item.id] = item.quantity || 1;
+          });
+          setSelectedSizes(initialSizes);
+          setQuantities(initialQuantities);
+        } else {
+          toast.warn("Please Login");
         }
       } catch (error) {
         toast.warning("Something went wrong");
@@ -53,16 +54,38 @@ function Cart() {
     }));
   };
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0)
+  const totalPrice = cartItems
+    .reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0)
+    .toFixed(2);
 
   function handleCheckout() {
-    navigate('/checkout', { state: { cartItems, selectedSizes, quantities, totalPrice } });
+    navigate("/checkout", {
+      state: { cartItems, selectedSizes, quantities, totalPrice },
+    });
   }
 
   function removeCart(item) {
-    const updatedCartItems = cartItems.filter(v => v.id !== item.id);
-    setCartItems(updatedCartItems);
-    handleRemove(item);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This item will be removed from your cart!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
+        setCartItems(updatedCartItems);
+        handleRemove(item);
+        Swal.fire(
+          "Removed!",
+          "The item has been removed from your cart.",
+          "success"
+        );
+      }
+    });
   }
 
   return (
@@ -90,7 +113,9 @@ function Cart() {
                     <label className="font-semibold">Size:</label>
                     <select
                       value={selectedSizes[item.id]}
-                      onChange={(e) => handleSizeChange(item.id, e.target.value)}
+                      onChange={(e) =>
+                        handleSizeChange(item.id, e.target.value)
+                      }
                       className="p-2 border-2"
                     >
                       {item.sizes.map((size, i) => (
@@ -104,7 +129,9 @@ function Cart() {
                     <label className="font-semibold">Quantity:</label>
                     <select
                       value={quantities[item.id] || 1}
-                      onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                      onChange={(e) =>
+                        handleQuantityChange(item.id, e.target.value)
+                      }
                       className="p-2 border-2"
                     >
                       {[...Array(10).keys()].map((num) => (
@@ -118,10 +145,15 @@ function Cart() {
                     <span className="text-black">Color:</span> {item.colors[0]}
                   </p>
                   <p>Rating: {item.rating}</p>
-                  <p className="text-lg font-bold">Price: ${item.price * (quantities[item.id] || 1)}</p>
+                  <p className="text-lg font-bold">
+                  Price: ${(item.price * (quantities[item.id] || 1)).toFixed(2)}
+                  </p>
                 </div>
                 <div>
-                  <MdDelete onClick={() => removeCart(item)} />
+                  <MdDelete
+                    onClick={() => removeCart(item)}
+                    className=" scale-150 cursor-pointer"
+                  />
                 </div>
               </li>
             ))}

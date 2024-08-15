@@ -8,7 +8,7 @@ function WomenPage() {
 
   useEffect(() => {
     const filteredProducts = products.filter(
-      (product) => product.category === "Women"
+      product => product.category === "Women"
     );
     setData(filteredProducts);
   }, [products]);

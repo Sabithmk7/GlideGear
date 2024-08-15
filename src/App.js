@@ -15,6 +15,7 @@ import axios from "axios";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Contact from "./pages/Contact";
+import Order from "./pages/Order";
 
 export const UserContext = createContext();
 
@@ -33,10 +34,12 @@ function App() {
       .then((res) => setproducts(res.data));
   }, []);
 
+  const name=localStorage.getItem('name')
+
   
   return (
     <Router>
-      <UserContext.Provider value={{ users, setUsers, products, setproducts }}>
+      <UserContext.Provider value={{ users, setUsers, products, setproducts,name }}>
       <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -49,6 +52,7 @@ function App() {
           <Route path="/collections" element={<Collection />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/order" element={<Order/>}/>
         </Routes>
       </UserContext.Provider>
       <ToastContainer />

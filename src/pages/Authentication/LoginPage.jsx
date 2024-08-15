@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -24,20 +23,20 @@ function LoginPage() {
     onSubmit: (values) => {
       try {
         const user = users.find(
-          u=>u.email === values.email && u.password === values.password
+          (u) => u.email === values.email && u.password === values.password
         );
         if (user) {
           localStorage.setItem("id", user.id);
           localStorage.setItem("name", user.name);
           localStorage.setItem("email", user.email);
           navigate("/");
+          window.location.reload()
           toast.success("Login successful!");
-          window.location.reload();
-          
         } else {
           toast.error("Invalid email or password");
         }
       } catch (error) {
+        console.log("Error fetching users");
         toast.error("Error fetching users");
       }
     },
@@ -96,7 +95,6 @@ function LoginPage() {
           </form>
         </div>
       </div>
-      <ToastContainer/>
     </div>
   );
 }
