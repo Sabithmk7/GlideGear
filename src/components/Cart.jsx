@@ -1,16 +1,19 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
-import Swal from "sweetalert2";
 import { handleRemove } from "../Context/HandleCart";
+import { UserContext } from "../App";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState({});
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
+  const{setCartCount}=useContext(UserContext)
 
   useEffect(() => {
     async function displayCartItems() {
@@ -59,36 +62,25 @@ function Cart() {
     .toFixed(2);
 
   function handleCheckout() {
+    console.log(quantities);
+
     navigate("/checkout", {
       state: { cartItems, selectedSizes, quantities, totalPrice },
     });
   }
 
   function removeCart(item) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This item will be removed from your cart!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
-        setCartItems(updatedCartItems);
-        handleRemove(item);
-        Swal.fire(
-          "Removed!",
-          "The item has been removed from your cart.",
-          "success"
-        );
-      }
-    });
+    const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
+    setCartItems(updatedCartItems);
+    handleRemove(item);
   }
 
+  useEffect(()=>{
+    setCartCount(cartItems.length)
+  },[cartItems,setCartCount])
   return (
+    <>
+    <Navbar/>
     <div className="bg-gray-100 p-4 md:p-8 lg:p-16 flex flex-col md:flex-row gap-8">
       <div className="flex-1">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Your Cart</h1>
@@ -146,7 +138,8 @@ function Cart() {
                   </p>
                   <p>Rating: {item.rating}</p>
                   <p className="text-lg font-bold">
-                  Price: ${(item.price * (quantities[item.id] || 1)).toFixed(2)}
+                    Price: $
+                    {(item.price * (quantities[item.id] || 1)).toFixed(2)}
                   </p>
                 </div>
                 <div>
@@ -178,6 +171,8 @@ function Cart() {
         </div>
       )}
     </div>
+    <Footer/>
+    </>
   );
 }
 

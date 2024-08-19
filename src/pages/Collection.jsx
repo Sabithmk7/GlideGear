@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Collection() {
   const [data, setData] = useState([]);
@@ -11,13 +13,15 @@ function Collection() {
   },[products])
 
   return (
+    <>
+    <Navbar/>
     <div className="p-4 sm:p-6 md:p-8 lg:p-16 xl:p-32 bg-gray-200">
       <div className="py-4 flex justify-between">
         <h1 className="text-2xl md:text-3xl font-bold">All Products</h1>
        
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4  gap-6">
         {data.map((item) => (
           <Link
             to={`/product/${item.id}`}
@@ -37,6 +41,8 @@ function Collection() {
         ))}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

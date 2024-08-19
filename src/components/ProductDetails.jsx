@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { handleAddCart } from "../Context/HandleCart";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 function ProductDetails() {
  
@@ -17,14 +19,14 @@ function ProductDetails() {
         console.error("Error fetching product details:", error);
       }
     };
-
     fetchProduct();
   }, [id]);
 
-  if (!product) return <p>Loading...</p>;
-
+  if (!product) return <p>No Products available</p>;
 
   return (
+    <>
+    <Navbar/>
     <div className="bg-gray-200 p-4 md:p-8 flex justify-center items-center">
       <div className="h-auto md:h-[80vh] w-full md:w-[70vw] shadow-lg bg-gray-100 flex flex-col md:flex-row items-center justify-around p-4 md:p-8">
         <div className="w-full md:w-auto mb-4 md:mb-0">
@@ -54,6 +56,8 @@ function ProductDetails() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

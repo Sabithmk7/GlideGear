@@ -18,6 +18,7 @@ function SignUp() {
       email: "",
       password: "",
       confirmpassword: "",
+      admin:false,
       cart: [],
       orders: []
     },
@@ -44,8 +45,8 @@ function SignUp() {
           await axios.post("http://localhost:3001/users", newData);
           toast.success("Signup Successful");
           setUsers(prevUsers => [...prevUsers, newData]);
-          setTimeout(() => navigate("/login"), 1500); 
-
+          navigate("/login")
+          window.location.reload()
         } catch (error) {
           console.error("Error creating user:", error);
           toast.error("Error creating user");

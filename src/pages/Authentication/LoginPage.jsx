@@ -25,18 +25,20 @@ function LoginPage() {
         const user = users.find(
           (u) => u.email === values.email && u.password === values.password
         );
-        if (user) {
+        if(user.admin===true){
+          localStorage.setItem('id',user.id)
+          navigate('/admin/dashboard')
+        }
+        else if (user) {
           localStorage.setItem("id", user.id);
           localStorage.setItem("name", user.name);
-          localStorage.setItem("email", user.email);
           navigate("/");
-          window.location.reload()
           toast.success("Login successful!");
         } else {
           toast.error("Invalid email or password");
         }
       } catch (error) {
-        console.log("Error fetching users");
+        console.log("Error fetching users:",error);
         toast.error("Error fetching users");
       }
     },

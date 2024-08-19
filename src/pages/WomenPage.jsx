@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function WomenPage() {
   const { products } = useContext(UserContext);
@@ -14,6 +16,8 @@ function WomenPage() {
   }, [products]);
 
   return (
+    <>
+    <Navbar/>
     <div className="p-4 sm:p-8 md:p-16 lg:p-32 bg-gray-200">
       <h1 className="text-2xl md:text-3xl font-bold">Women's Products</h1>
 
@@ -43,6 +47,8 @@ function WomenPage() {
         </div>
       )}
     </div>
+    <Footer/>
+    </>
   );
 }
 

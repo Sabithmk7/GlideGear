@@ -1,46 +1,52 @@
 import React, { createContext, useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import HomePage from "./pages/Home";
+import HomePage from "./pages/Home/Home";
 import LoginPage from "./pages/Authentication/LoginPage";
-import Navbar from "./components/Navbar";
 import SignUp from "./pages/Authentication/SignUp";
-import ProductDetails from "./pages/ProductDetails";
+import ProductDetails from "./components/ProductDetails";
 import MenPage from "./pages/MenPage";
-import Footer from "./components/Footer";
 import WomenPage from "./pages/WomenPage";
 import Collection from "./pages/Collection";
 import axios from "axios";
-import Cart from "./pages/Cart";
+import Cart from "./components/Cart";
 import Checkout from "./pages/Checkout";
-import Contact from "./pages/Contact";
+import Contact from "./components/Contact";
 import Order from "./pages/Order";
+import Home from "./Admin/Home";
+
 
 export const UserContext = createContext();
 
 function App() {
   const [users, setUsers] = useState([]);
   const [products, setproducts] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+  
 
   useEffect(() => {
-    axios.get("http://localhost:3001/users")
-    .then((res) => setUsers(res.data));
-  }, []);
+    axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));
+  }, [users]);
 
   useEffect(() => {
     axios
       .get("http://localhost:3001/products")
       .then((res) => setproducts(res.data));
-  }, []);
+  }, [products]);
 
-  const name=localStorage.getItem('name')
-
-  
   return (
-    <Router>
-      <UserContext.Provider value={{ users, setUsers, products, setproducts,name }}>
-      <Navbar />
+    <>
+      <UserContext.Provider
+        value={{
+          users,
+          setUsers,
+          products,
+          setproducts,
+          cartCount,
+          setCartCount
+        }}
+      >
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -52,12 +58,12 @@ function App() {
           <Route path="/collections" element={<Collection />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/order" element={<Order/>}/>
+          <Route path="/order" element={<Order />} />
+          <Route path="admin/:url" element={<Home />} />
         </Routes>
       </UserContext.Provider>
-      <ToastContainer />
-      <Footer />
-    </Router>
+      <ToastContainer position="bottom-right" />
+      </>
   );
 }
 

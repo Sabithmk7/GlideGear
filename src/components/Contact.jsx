@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const validationSchema = yup.object({
   from_name: yup.string().required("Name is required"),
@@ -36,6 +38,8 @@ function Contact() {
   });
 
   return (
+   <>
+   <Navbar/>
     <div className="flex justify-center items-center p-8 bg-gray-100">
       <form
         id="contactForm"
@@ -103,6 +107,8 @@ function Contact() {
         </button>
       </form>
     </div>
+    <Footer/>
+    </>
   );
 }
 

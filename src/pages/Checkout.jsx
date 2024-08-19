@@ -1,23 +1,43 @@
 import axios from "axios";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const validationSchema = yup.object({
   fullName: yup.string().required("Full name is required"),
   address: yup.string().required("Address is required"),
   city: yup.string().required("City is required"),
-  postalCode: yup.string().required("Postal code is required").min(6,"Minimum 6 digits required").max(6,'Maximum 6 digits'),
-  phoneNumber: yup.string().required("Phone number is required").min(10,'Minimum 10 digits required').max(10,'Maximum 10 digits'),
+  postalCode: yup.string().required("Postal code is required").min(6, "Minimum 6 digits required").max(6, 'Maximum 6 digits'),
+  phoneNumber: yup.string().required("Phone number is required").min(10, 'Minimum 10 digits required').max(10, 'Maximum 10 digits'),
   paymentMethod: yup.string().required("Payment method is required"),
 });
 
 function Checkout() {
   const location = useLocation();
   const { cartItems, selectedSizes, quantities, totalPrice } = location.state;
+
+  const updatedCartItems = cartItems.map(item => ({
+    ...item,
+    quantity: quantities[item.id] || 1
+  }));
+
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const userId = localStorage.getItem("id");
+        const res = await axios.get(`http://localhost:3001/users/${userId}`);
+        setOrders(res.data.orders || []);
+      } catch (error) {
+        console.error("Failed to fetch orders", error);
+      }
+    };
+    fetchOrders();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -28,34 +48,33 @@ function Checkout() {
       phoneNumber: "",
       paymentMethod: "",
     },
-    validationSchema, 
+    validationSchema,
     onSubmit: async (values) => {
       const orderId = `ORD-${Date.now()}`;
-      const newOrders = {
+      const newOrder = {
         orderId,
         ...values,
-        quantities,
+        cartItems: updatedCartItems,
         amount: totalPrice,
       };
-
       try {
         const userId = localStorage.getItem("id");
-        const res = await axios.get(`http://localhost:3001/users/${userId}`);
-        const orders = res.data.orders
-        const updatedOrders = [...orders, newOrders];
         await axios.patch(`http://localhost:3001/users/${userId}`, {
-          orders: updatedOrders,
+          orders: [...orders, newOrder],
         });
+        setOrders(prevOrders => [...prevOrders, newOrder]); 
         toast.success("Order Successful");
         formik.resetForm();
       } catch (error) {
-        console.log(error);
+        console.error("Order failed", error);
         toast.error("Order failed");
       }
     },
   });
 
   return (
+    <>
+    <Navbar/>
     <div className="bg-gray-100 p-4 md:p-8 lg:p-16 flex flex-col lg:flex-row gap-8">
       <div className="flex-1">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Checkout Form</h1>
@@ -219,7 +238,7 @@ function Checkout() {
         <div className="bg-white shadow-lg p-6">
           <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
           <ul className="mt-4 space-y-4">
-            {cartItems.map((item, index) => (
+            {updatedCartItems.map((item, index) => (
               <li key={index} className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <img
@@ -229,27 +248,23 @@ function Checkout() {
                   />
                   <div>
                     <h2 className="text-lg font-semibold">{item.name}</h2>
-                    <p className="text-gray-600">
-                      Size: {selectedSizes[item.id]}
-                    </p>
+                    <p className="text-gray-600">Size: {selectedSizes[item.id]}</p>
                     <p className="text-gray-600">Color: {item.colors[0]}</p>
-                    <p className="text-gray-600">
-                      Quantity: {quantities[item.id] || 1}
-                    </p>
-                    <p className="text-lg font-bold">
-                      ${item.price * (quantities[item.id] || 1)}
-                    </p>
+                    <p className="text-gray-600">Quantity: {item.quantity}</p>
+                    <p className="text-lg font-bold">${item.price * item.quantity}</p>
                   </div>
                 </div>
               </li>
             ))}
           </ul>
-          <p className="border-t-2 border-gray-500 px-3 py-4 flex justify-between mt-6">
+          <p className="border-t-2 border-gray-500 px-3 py-4 flex justify-between">
             <span>Total</span> <span>${totalPrice}</span>
           </p>
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 
