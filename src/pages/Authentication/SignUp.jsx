@@ -1,16 +1,17 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { userAPI } from "../../Api";
 import { UserContext } from "../../App";
 
 function SignUp() {
   const navigate = useNavigate();
   const { users, setUsers } = useContext(UserContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -18,15 +19,18 @@ function SignUp() {
       email: "",
       password: "",
       confirmpassword: "",
-      admin:false,
+      admin: false,
+      blocked: false,
       cart: [],
       orders: []
     },
     validationSchema: Yup.object({
-      name: Yup.string().min(2, 'Too short').required("Name is required"),
-      email: Yup.string().email("Invalid email address").required("Email is required"),
+      name: Yup.string().min(2, "Too short").required("Name is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
       password: Yup.string()
-        .required('Please Enter your password')
+        .required("Please Enter your password")
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
@@ -36,23 +40,28 @@ function SignUp() {
         .required("Confirm Password is required"),
     }),
     onSubmit: async (values) => {
-      const isUser = users?.find((u) => u.email === values.email);
-      if (isUser) {
-        toast.error("Email already in use");
-      } else {
-        try {
-          const { confirmpassword, ...newData } = values;
-          await axios.post("http://localhost:3001/users", newData);
+      if (isSubmitting) return; 
+      setIsSubmitting(true);
+      const { confirmpassword, ...newData } = values;
+
+      try {
+        const isUser = users.find((u) => u.email === values.email);
+        if (isUser) {
+          toast.error("Email already in use");
+        } else {
+          const response = await axios.post(userAPI, newData);
+          const createdUser = response.data; 
+          setUsers((prevUsers) => [...prevUsers, createdUser]);
           toast.success("Signup Successful");
-          setUsers(prevUsers => [...prevUsers, newData]);
-          navigate("/login")
-          window.location.reload()
-        } catch (error) {
-          console.error("Error creating user:", error);
-          toast.error("Error creating user");
+          navigate("/login");
         }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("Error creating user");
+      } finally {
+        setIsSubmitting(false);
       }
-    }
+    },
   });
 
   return (
@@ -75,7 +84,11 @@ function SignUp() {
                 type="text"
                 name="name"
                 placeholder="Name"
-                className={`border-b-2 p-2 focus:outline-none ${formik.touched.name && formik.errors.name ? "border-red-500" : ""}`}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.name && formik.errors.name
+                    ? "border-red-500"
+                    : ""
+                }`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
@@ -88,7 +101,11 @@ function SignUp() {
                 type="text"
                 name="email"
                 placeholder="Email"
-                className={`border-b-2 p-2 focus:outline-none ${formik.touched.email && formik.errors.email ? "border-red-500" : ""}`}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.email && formik.errors.email
+                    ? "border-red-500"
+                    : ""
+                }`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
@@ -101,7 +118,11 @@ function SignUp() {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`border-b-2 p-2 focus:outline-none ${formik.touched.password && formik.errors.password ? "border-red-500" : ""}`}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500"
+                    : ""
+                }`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
@@ -114,27 +135,33 @@ function SignUp() {
                 type="password"
                 name="confirmpassword"
                 placeholder="Confirm Password"
-                className={`border-b-2 p-2 focus:outline-none ${formik.touched.confirmpassword && formik.errors.confirmpassword ? "border-red-500" : ""}`}
+                className={`border-b-2 p-2 focus:outline-none ${
+                  formik.touched.confirmpassword &&
+                  formik.errors.confirmpassword
+                    ? "border-red-500"
+                    : ""
+                }`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.confirmpassword}
               />
-              {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
-                <p className="text-red-500 text-sm">{formik.errors.confirmpassword}</p>
+              {formik.touched.confirmpassword &&
+              formik.errors.confirmpassword ? (
+                <p className="text-red-500 text-sm">
+                  {formik.errors.confirmpassword}
+                </p>
               ) : null}
 
               <div className="flex mt-10 items-center justify-between px-2">
                 <button
                   type="submit"
                   className="hover:bg-blue-600 bg-blue-500 text-white h-10 w-24"
+                  disabled={isSubmitting}
                 >
                   SignUp
                 </button>
                 <button
-                  onClick={() => {
-                    navigate("/login");
-                    window.location.reload();
-                  }}
+                  onClick={() => navigate("/login")}
                   className="text-blue-500"
                 >
                   LogIn
@@ -144,7 +171,6 @@ function SignUp() {
           </div>
         </div>
       </form>
-      <ToastContainer />
     </div>
   );
 }

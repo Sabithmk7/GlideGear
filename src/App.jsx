@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import {  Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./pages/Home/Home";
@@ -21,19 +21,36 @@ export const UserContext = createContext();
 
 function App() {
   const [users, setUsers] = useState([]);
-  const [products, setproducts] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   
-
   useEffect(() => {
     axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));
-  }, [users]);
+  }, []);
 
   useEffect(() => {
     axios
       .get("http://localhost:3001/products")
-      .then((res) => setproducts(res.data));
-  }, [products]);
+      .then((res) => setProducts(res.data));
+  }, []);
+
+  async function fetchCart() {
+    const userId=localStorage.getItem("id")
+    if(userId){
+      try{
+        const res=await axios.get(`http://localhost:3001/users/${userId}`)
+        setCartItems(res.data.cart)
+      }
+      catch(error)
+      {
+        console.error("Failed to fetch cart items", error);
+      }
+    }
+  }
+ 
+  useEffect(()=>{
+    fetchCart()
+  },[])
 
   return (
     <>
@@ -42,9 +59,10 @@ function App() {
           users,
           setUsers,
           products,
-          setproducts,
-          cartCount,
-          setCartCount
+          setProducts,
+          cartItems,
+          setCartItems,
+          fetchCart
         }}
       >
         <Routes>
@@ -63,7 +81,7 @@ function App() {
         </Routes>
       </UserContext.Provider>
       <ToastContainer position="bottom-right" />
-      </>
+    </>
   );
 }
 

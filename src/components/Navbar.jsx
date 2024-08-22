@@ -15,27 +15,29 @@ function Navbar() {
   const [items, setItems] = useState([]);
   const [records, setRecords] = useState([]);
   const [query, setQuery] = useState("");
-  const { products, cartCount } = useContext(UserContext);
+  const { products, cartItems,fetchCart } = useContext(UserContext);
 
-  useEffect(() => {
-   fetchUser()
-  }, []);
-
-  async function fetchUser(){
-    const name = localStorage.getItem("name");
-    const userId = localStorage.getItem("id");
-    if (userId) {
-      setIsLoggedIn(true);
-      if (name) {
-        setName(name);
-      }
-    }
-  }
+  let cartCount=cartItems.length
 
   useEffect(() => {
     setItems(products);
     setRecords(products);
   }, [products]);
+
+  async function fetchUser() {
+    const name = localStorage.getItem("name");
+    const userId = localStorage.getItem("id");
+    if (userId) {
+      setIsLoggedIn(true);
+      setName(name);
+    }
+  }
+
+
+  useEffect(() => {
+    fetchUser();
+    fetchCart()
+  }, [fetchCart]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -60,10 +62,11 @@ function Navbar() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();
+        window.location.reload()
         toast.warn("Logged Out");
         setIsLoggedIn(false);
         setIsDropdownOpen(false);
-        setName("");
+        setName("")
         navigate("/");
       }
     });
@@ -80,7 +83,6 @@ function Navbar() {
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
-
   return (
     <>
       <nav className="bg-white shadow-md p-4 sticky top-0 z-50">

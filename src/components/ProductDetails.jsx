@@ -21,7 +21,6 @@ function ProductDetails() {
     };
     fetchProduct();
   }, [id]);
-
   if (!product) return <p>No Products available</p>;
 
   return (

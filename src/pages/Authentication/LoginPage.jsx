@@ -25,24 +25,30 @@ function LoginPage() {
         const user = users.find(
           (u) => u.email === values.email && u.password === values.password
         );
-        if(user.admin===true){
-          localStorage.setItem('id',user.id)
-          navigate('/admin/dashboard')
-        }
-        else if (user) {
-          localStorage.setItem("id", user.id);
-          localStorage.setItem("name", user.name);
-          navigate("/");
-          toast.success("Login successful!");
+        if (user) {
+          if (user.blocked) {
+            toast.error("You are blocked");
+          } else if (user.admin === true) {
+            localStorage.setItem("id", user.id);
+            localStorage.setItem("role", user.admin);
+            toast.success("Admin logged in");
+            navigate("/admin/dashboard");
+          } else {
+            localStorage.setItem("id", user.id);
+            localStorage.setItem("name", user.name);
+            toast.success("Login successful!");
+            navigate("/");
+          }
         } else {
           toast.error("Invalid email or password");
         }
       } catch (error) {
-        console.log("Error fetching users:",error);
+        console.log("Error fetching users:", error);
         toast.error("Error fetching users");
       }
     },
   });
+
 
   return (
     <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-50">
