@@ -190,7 +190,29 @@
       "password": "Sabith789!",
       "admin": false,
       "blocked": false,
-      "cart": [],
+      "cart": [
+        {
+          "id": "12",
+          "name": "Hoka Bondi 8",
+          "brand": "Hoka",
+          "price": 160,
+          "description": "Maximum cushioning running shoe for a plush and comfortable ride.",
+          "image": "https://dms.deckers.com/hoka/image/upload/f_auto,q_auto,dpr_auto/b_rgb:f7f7f9/w_483/v1721616147/catalog/images/transparent/1123202-WVR_1.png?_s=RAABAB0",
+          "category": "Women",
+          "sizes": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "colors": [
+            "Purple",
+            "Blue",
+            "Pink"
+          ],
+          "rating": 4.8
+        }
+      ],
       "orders": [
         {
           "orderId": "ORD-1724309775412",
@@ -348,6 +370,16 @@
         }
       ],
       "orders": []
+    },
+    {
+      "id": "7489",
+      "name": "hi",
+      "email": "hi@gmail.com",
+      "password": "Hi789!23",
+      "admin": false,
+      "blocked": false,
+      "cart": [],
+      "orders": []
     }
   ],
   "products": [
@@ -355,16 +387,15 @@
       "id": "8",
       "name": "Puma RS-X",
       "brand": "Puma",
-      "price": "11",
-      "description": "Bold and futuristic sneaker with a retro-inspired design",
+      "price": "16",
+      "description": "Bold and futuristic sneaker with a retro-inspired ",
       "image": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_500,h_500/global/381645/01/sv01/fnd/IND/fmt/png/RS---Z-Art-of-Sport-Unisex-Sneakers",
       "category": "Men",
       "sizes": [
         "8",
         "9",
         "10",
-        "11",
-        ""
+        "11"
       ],
       "colors": [
         "Black",
@@ -383,11 +414,11 @@
       "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
       "category": "Women",
       "sizes": [
-        5,
-        6,
-        7,
-        8,
-        9
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
       ],
       "colors": [
         "White",

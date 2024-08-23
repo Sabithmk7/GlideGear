@@ -8,29 +8,16 @@ import EditProducts from "./EditProducts";
 import NotFound from "../components/NotFound";
 import Swal from "sweetalert2";
 import axios from "axios";
-import Search from "./Search";
 
 const Home = () => {
   const { url } = useParams();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     fetchUser();
-    fetchProducts();
   }, []);
-
-  useEffect(() => {
-    if (searchQuery) {
-      filterProducts(searchQuery);
-    } else {
-      setFilteredProducts([]);
-    }
-  }, [searchQuery, products]);
 
   async function fetchUser() {
     let userId = localStorage.getItem("id");
@@ -38,24 +25,6 @@ const Home = () => {
       let res = await axios.get(`http://localhost:3001/users/${userId}`);
       if (res.data?.admin === true) setIsAdmin(true);
     }
-  }
-
-  async function fetchProducts() {
-    try {
-      const res = await axios.get("http://localhost:3001/products");
-      setProducts(res.data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  }
-
-  function filterProducts(query) {
-    const lowercasedQuery = query.toLowerCase();
-    const filtered = products.filter(product =>
-      product.name.toLowerCase().includes(lowercasedQuery) 
-     
-    );
-    setFilteredProducts(filtered);
   }
 
   const handleLogout = () => {
@@ -72,10 +41,6 @@ const Home = () => {
         navigate("/login");
       }
     });
-  };
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
   };
 
   const Data = [
@@ -103,13 +68,6 @@ const Home = () => {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <input
-                  type="text"
-                  placeholder="Search Products.."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
                 <button
                   className="text-gray-200 hover:text-gray-400"
                   onClick={handleLogout}
@@ -140,9 +98,7 @@ const Home = () => {
           </div>
 
           <div className="flex-1 ml-0 md:ml-72 w-full p-6 pt-20">
-            {searchQuery ? (
-              <Search results={filteredProducts} />
-            ) : url === "dashboard" ? (
+            {url === "dashboard" ? (
               <Dashboard />
             ) : url === "allusers" ? (
               <AllUsers />

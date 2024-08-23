@@ -1,45 +1,47 @@
 import axios from "axios";
-import React, {useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
 import { handleRemove } from "../Context/HandleCart";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { UserContext } from "../App";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState({});
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
+  const { fetchCart } = useContext(UserContext);
 
   useEffect(() => {
     displayCartItems();
   }, []);
 
   async function displayCartItems() {
-      try {
-        const userId = localStorage.getItem("id");
-        if (userId) {
-          const res = await axios.get(`http://localhost:3001/users/${userId}`);
-          const cartList = res.data.cart;
-          setCartItems(cartList);
-          const initialSizes = {};
-          const initialQuantities = {};
-          cartList.forEach((item) => {
-            initialSizes[item.id] = item.sizes[0];
-            initialQuantities[item.id] = item.quantity || 1;
-          });
-          setSelectedSizes(initialSizes);
-          setQuantities(initialQuantities);
-        } else {
-          toast.warn("Please Login");
-        }
-      } catch (error) {
-        toast.warning("Something went wrong");
-        console.log(error);
+    try {
+      const userId = localStorage.getItem("id");
+      if (userId) {
+        const res = await axios.get(`http://localhost:3001/users/${userId}`);
+        const cartList = res.data.cart;
+        setCartItems(cartList);
+        const initialSizes = {};
+        const initialQuantities = {};
+        cartList.forEach((item) => {
+          initialSizes[item.id] = item.sizes[0];
+          initialQuantities[item.id] = item.quantity || 1;
+        });
+        setSelectedSizes(initialSizes);
+        setQuantities(initialQuantities);
+      } else {
+        toast.warn("Please Login");
       }
+    } catch (error) {
+      toast.warning("Something went wrong");
+      console.log(error);
     }
+  }
 
   const handleSizeChange = (itemId, size) => {
     setSelectedSizes((prevSizes) => ({
@@ -54,21 +56,18 @@ function Cart() {
       [itemId]: quantity,
     }));
   };
-  
-  
 
   const totalPrice = cartItems
     .reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0)
     .toFixed(2);
 
-    
-    function removeCart(item) {
-      const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
-      setCartItems(updatedCartItems);
-      handleRemove(item);
-    }
-   
-  
+  async function removeCart(item) {
+    const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
+    setCartItems(updatedCartItems);
+    await handleRemove(item);
+    await fetchCart();
+  }
+
   function handleCheckout() {
     console.log(quantities);
 
@@ -76,7 +75,6 @@ function Cart() {
       state: { cartItems, selectedSizes, quantities, totalPrice },
     });
   }
-
 
   return (
     <>

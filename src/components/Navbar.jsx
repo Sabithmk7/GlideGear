@@ -15,9 +15,7 @@ function Navbar() {
   const [items, setItems] = useState([]);
   const [records, setRecords] = useState([]);
   const [query, setQuery] = useState("");
-  const { products, cartItems,fetchCart } = useContext(UserContext);
-
-  let cartCount=cartItems.length
+  const { products, cartItems,setCartItems,fetchCart } = useContext(UserContext);
 
   useEffect(() => {
     setItems(products);
@@ -30,14 +28,13 @@ function Navbar() {
     if (userId) {
       setIsLoggedIn(true);
       setName(name);
+      fetchCart()
     }
   }
 
-
   useEffect(() => {
     fetchUser();
-    fetchCart()
-  }, [fetchCart]);
+  }, []);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -62,7 +59,8 @@ function Navbar() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();
-        window.location.reload()
+        setCartItems([])
+        // window.location.reload()
         toast.warn("Logged Out");
         setIsLoggedIn(false);
         setIsDropdownOpen(false);
@@ -83,6 +81,7 @@ function Navbar() {
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
+  
   return (
     <>
       <nav className="bg-white shadow-md p-4 sticky top-0 z-50">
@@ -171,7 +170,7 @@ function Navbar() {
             <Link to="/cart" className="relative">
               <FaShoppingCart />
               <span className="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {cartCount}
+                {cartItems.length}
               </span>
             </Link>
             <div className="relative">

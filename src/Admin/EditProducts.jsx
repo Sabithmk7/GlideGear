@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditProducts = () => {
   const [products, setProducts] = useState([]);
@@ -9,15 +9,16 @@ const EditProducts = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/products');
+        const response = await axios.get("http://localhost:3001/products");
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
-        setError('Failed to fetch products.');
+        setError("Failed to fetch products.");
         setLoading(false);
       }
     };
@@ -37,10 +38,10 @@ const EditProducts = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/products/${id}`);
-      setProducts(products.filter(product => product.id !== id));
-      toast.success('Product deleted successfully!');
+      setProducts(products.filter((product) => product.id !== id));
+      toast.success("Product deleted successfully!");
     } catch (error) {
-      toast.error('Failed to delete product.');
+      toast.error("Failed to delete product.");
     }
   };
 
@@ -54,82 +55,120 @@ const EditProducts = () => {
     const { name, value } = e.target;
     setSelectedProduct({
       ...selectedProduct,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleArrayChange = (e) => {
     const { name, value } = e.target;
-    const values = value.split(',').map(v => v.trim());
+    const values = value.split(",").map((v) => v.trim());
     setSelectedProduct({
       ...selectedProduct,
-      [name]: values
+      [name]: values,
     });
   };
 
   const handleCategoryChange = (e) => {
     setSelectedProduct({
       ...selectedProduct,
-      category: e.target.value
+      category: e.target.value,
     });
   };
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:3001/products/${selectedProduct.id}`, selectedProduct);
-      setProducts(products.map(product =>
-        product.id === selectedProduct.id ? selectedProduct : product
-      ));
-      toast.success('Product updated successfully!');
+      await axios.put(
+        `http://localhost:3001/products/${selectedProduct.id}`,
+        selectedProduct
+      );
+      setProducts(
+        products.map((product) =>
+          product.id === selectedProduct.id ? selectedProduct : product
+        )
+      );
+      toast.success("Product updated successfully!");
       handleModalClose();
     } catch (error) {
-      toast.error('Failed to update product.');
+      toast.error("Failed to update product.");
     }
   };
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Product List</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.map(product => (
-          <div
-            key={product.id}
-            className="border p-4 rounded cursor-pointer hover:shadow-lg"
-            onClick={() => handleCardClick(product)}
-          >
-            <img src={product.image} alt={product.name} className="w-full h-32 object-cover mb-2" />
-            <h2 className="text-lg font-bold">{product.name}</h2>
-            <p>{product.description}</p>
-            <p>Price: ${product.price}</p>
-            <div className="flex gap-2 mt-2">
-              <button
-                onClick={(e) => { e.stopPropagation(); handleEdit(product); }}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Edit
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); handleDelete(product.id); }}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-bold ">Product List</h1>
 
-      {/* Edit Product Modal */}
+        {/* Search input */}
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className=" p-2 border rounded "
+        />
+      </div>
+      {filteredProducts.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="border p-4 rounded cursor-pointer hover:shadow-lg"
+              onClick={() => handleCardClick(product)}
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-32 object-cover mb-2"
+              />
+              <h2 className="text-lg font-bold">{product.name}</h2>
+              <p>{product.description}</p>
+              <p>Price: ${product.price}</p>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(product);
+                  }}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(product.id);
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No products found.</p>
+      )}
+
       {showEditModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
             <h2 className="text-xl font-bold mb-4">Edit Product</h2>
             <form>
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
                 <input
                   type="text"
                   id="name"
@@ -140,7 +179,12 @@ const EditProducts = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
+                <label
+                  htmlFor="price"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Price
+                </label>
                 <input
                   type="number"
                   id="price"
@@ -151,7 +195,12 @@ const EditProducts = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Description
+                </label>
                 <textarea
                   id="description"
                   name="description"
@@ -161,7 +210,12 @@ const EditProducts = () => {
                 ></textarea>
               </div>
               <div className="mb-4">
-                <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image URL</label>
+                <label
+                  htmlFor="image"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Image URL
+                </label>
                 <input
                   type="text"
                   id="image"
@@ -172,7 +226,12 @@ const EditProducts = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Category
+                </label>
                 <select
                   id="category"
                   name="category"
@@ -185,12 +244,22 @@ const EditProducts = () => {
                 </select>
               </div>
               <div className="mb-4">
-                <label htmlFor="bestseller" className="block text-sm font-medium text-gray-700">Bestseller</label>
+                <label
+                  htmlFor="bestseller"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Bestseller
+                </label>
                 <select
                   id="bestseller"
                   name="bestseller"
                   value={selectedProduct.bestseller}
-                  onChange={(e) => setSelectedProduct({ ...selectedProduct, bestseller: e.target.value === 'true' })}
+                  onChange={(e) =>
+                    setSelectedProduct({
+                      ...selectedProduct,
+                      bestseller: e.target.value === "true",
+                    })
+                  }
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 >
                   <option value={true}>Yes</option>
@@ -198,38 +267,89 @@ const EditProducts = () => {
                 </select>
               </div>
               <div className="mb-4">
-                <label htmlFor="sizes" className="block text-sm font-medium text-gray-700">Sizes (comma separated)</label>
+                <label
+                  htmlFor="sizes"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Sizes (comma separated)
+                </label>
                 <input
                   type="text"
                   id="sizes"
                   name="sizes"
-                  value={selectedProduct.sizes.join(', ')}
+                  value={selectedProduct.sizes.join(",")}
                   onChange={handleArrayChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="colors" className="block text-sm font-medium text-gray-700">Colors (comma separated)</label>
+                <label
+                  htmlFor="colors"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Colors (comma separated)
+                </label>
                 <input
                   type="text"
                   id="colors"
                   name="colors"
-                  value={selectedProduct.colors.join(', ')}
+                  value={selectedProduct.colors.join(",")}
                   onChange={handleArrayChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
               </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="rating"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Rating
+                </label>
+                <input
+                  type="number"
+                  id="rating"
+                  name="rating"
+                  value={selectedProduct.rating}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleModalClose}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Save Changes
+                </button>
+              </div>
             </form>
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={handleSave}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Save
-              </button>
+          </div>
+        </div>
+      )}
+
+      {showDetailsModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+            <h2 className="text-xl font-bold mb-4">{selectedProduct.name}</h2>
+            <p>{selectedProduct.description}</p>
+            <p>Price: ${selectedProduct.price}</p>
+            <p>Category: {selectedProduct.category}</p>
+            <p>Bestseller: {selectedProduct.bestseller ? "Yes" : "No"}</p>
+            <p>Sizes: {selectedProduct.sizes.join(", ")}</p>
+            <p>Colors: {selectedProduct.colors.join(", ")}</p>
+            <p>Rating: {selectedProduct.rating}</p>
+            <div className="flex justify-end mt-4">
               <button
                 onClick={handleModalClose}
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
               >
                 Close
               </button>
@@ -237,66 +357,6 @@ const EditProducts = () => {
           </div>
         </div>
       )}
-
-      {/* Product Details Modal */}
-
-{/* Product Details Modal */}
-{showDetailsModal && (
-  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 max-w-4xl max-h-[80vh] overflow-auto">
-      <h2 className="text-xl font-bold mb-4">Product Details</h2>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Name</label>
-        <p>{selectedProduct.name}</p>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Price</label>
-        <p>${selectedProduct.price}</p>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Description</label>
-        <p>{selectedProduct.description}</p>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Image</label>
-        <div className="relative">
-          <img
-            src={selectedProduct.image}
-            alt={selectedProduct.name}
-            className="w-full max-h-72 object-contain rounded-md"
-          />
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Category</label>
-        <p>{selectedProduct.category}</p>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Bestseller</label>
-        <p>{selectedProduct.bestseller ? 'Yes' : 'No'}</p>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Sizes</label>
-        <p>{selectedProduct.sizes.join(', ')}</p>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Colors</label>
-        <p>{selectedProduct.colors.join(', ')}</p>
-      </div>
-      <div className="flex justify-end mt-4">
-        <button
-          onClick={handleModalClose}
-          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-
-
     </div>
   );
 };
