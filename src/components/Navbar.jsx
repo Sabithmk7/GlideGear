@@ -60,7 +60,6 @@ function Navbar() {
       if (result.isConfirmed) {
         localStorage.clear();
         setCartItems([])
-        // window.location.reload()
         toast.warn("Logged Out");
         setIsLoggedIn(false);
         setIsDropdownOpen(false);

@@ -9,7 +9,7 @@ const EditProducts = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -104,8 +104,6 @@ const EditProducts = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold ">Product List</h1>
-
-        {/* Search input */}
         <input
           type="text"
           placeholder="Search products..."

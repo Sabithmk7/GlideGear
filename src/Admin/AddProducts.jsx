@@ -10,14 +10,11 @@ const AddProduct = () => {
     description: '',
     image: '',
     category: 'Men',
-    sizes: [],
-    colors: [],
+    sizes: '',
+    colors: '',
     rating: '',
     bestseller: false,
   });
-
-  const [sizeInput, setSizeInput] = useState('');
-  const [colorInput, setColorInput] = useState('');
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,30 +24,16 @@ const AddProduct = () => {
     }));
   };
 
-  const handleSizeAdd = () => {
-    if (sizeInput && !product.sizes.includes(Number(sizeInput))) {
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        sizes: [...prevProduct.sizes, Number(sizeInput)],
-      }));
-      setSizeInput('');
-    }
-  };
-
-  const handleColorAdd = () => {
-    if (colorInput && !product.colors.includes(colorInput)) {
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        colors: [...prevProduct.colors, colorInput],
-      }));
-      setColorInput('');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formattedProduct = {
+      ...product,
+      sizes: product.sizes.split(',').map(size => Number(size.trim())),
+      colors: product.colors.split(',').map(color => color.trim()),
+    };
+
     try {
-      await axios.post('http://localhost:3001/products', product);
+      await axios.post('http://localhost:3001/products', formattedProduct);
       toast.success('Product added successfully!');
       setProduct({
         name: '',
@@ -59,8 +42,8 @@ const AddProduct = () => {
         description: '',
         image: '',
         category: 'Men',
-        sizes: [],
-        colors: [],
+        sizes: '',
+        colors: '',
         rating: '',
         bestseller: false,
       });
@@ -71,7 +54,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg w-full max-w-4xl  mx-auto">
+    <div className="p-6 bg-white shadow-md rounded-lg w-full max-w-4xl mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-gray-900">Add New Product</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -155,57 +138,27 @@ const AddProduct = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Sizes</label>
-          <div className="flex items-center space-x-2">
-            <input
-              type="number"
-              value={sizeInput}
-              onChange={(e) => setSizeInput(e.target.value)}
-              className="block border border-gray-300 rounded-md shadow-sm px-3 py-2"
-              placeholder="Enter size"
-            />
-            <button
-              type="button"
-              onClick={handleSizeAdd}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Add Size
-            </button>
-          </div>
-          <div className="mt-2">
-            {product.sizes.map((size, index) => (
-              <span key={index} className="inline-block bg-gray-200 rounded px-2 py-1 mr-2 mb-2 text-sm">
-                {size}
-              </span>
-            ))}
-          </div>
+          <label className="block text-sm font-medium text-gray-700">Sizes (comma separated)</label>
+          <input
+            type="text"
+            name="sizes"
+            value={product.sizes}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2"
+            placeholder="Enter sizes, e.g., 8, 9, 10"
+          />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Colors</label>
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              value={colorInput}
-              onChange={(e) => setColorInput(e.target.value)}
-              className="block border border-gray-300 rounded-md shadow-sm px-3 py-2"
-              placeholder="Enter color"
-            />
-            <button
-              type="button"
-              onClick={handleColorAdd}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Add Color
-            </button>
-          </div>
-          <div className="mt-2">
-            {product.colors.map((color, index) => (
-              <span key={index} className="inline-block bg-gray-200 rounded px-2 py-1 mr-2 mb-2 text-sm">
-                {color}
-              </span>
-            ))}
-          </div>
+          <label className="block text-sm font-medium text-gray-700">Colors (comma separated)</label>
+          <input
+            type="text"
+            name="colors"
+            value={product.colors}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2"
+            placeholder="Enter colors, e.g., red, blue, green"
+          />
         </div>
 
         <div>

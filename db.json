@@ -192,25 +192,26 @@
       "blocked": false,
       "cart": [
         {
-          "id": "12",
-          "name": "Hoka Bondi 8",
-          "brand": "Hoka",
-          "price": 160,
-          "description": "Maximum cushioning running shoe for a plush and comfortable ride.",
-          "image": "https://dms.deckers.com/hoka/image/upload/f_auto,q_auto,dpr_auto/b_rgb:f7f7f9/w_483/v1721616147/catalog/images/transparent/1123202-WVR_1.png?_s=RAABAB0",
-          "category": "Women",
+          "id": "10",
+          "name": "Vans Old Skool",
+          "brand": "Vans",
+          "price": "60",
+          "description": "Iconic skate shoe with a simple and stylish design.",
+          "image": "https://images.vans.com/is/image/Vans/VN000D3H_Y28_HERO?wid=1600&hei=1984&fmt=jpeg&qlt=90&resMode=sharp2&op_usm=0.9,1.7,8,0",
+          "category": "Men",
           "sizes": [
             6,
             7,
             8,
-            9
+            9,
+            10
           ],
           "colors": [
-            "Purple",
-            "Blue",
-            "Pink"
+            "Black",
+            "White",
+            "Checkerboard"
           ],
-          "rating": 4.8
+          "rating": 4.4
         }
       ],
       "orders": [
