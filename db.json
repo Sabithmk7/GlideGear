@@ -9,42 +9,6 @@
       "cart": [],
       "orders": [
         {
-          "orderId": "ORD-1724308533599",
-          "fullName": "adsda",
-          "address": "sadasd",
-          "city": "dasd",
-          "postalCode": 111111,
-          "phoneNumber": 1111111111,
-          "paymentMethod": "Card",
-          "cartItems": [
-            {
-              "id": "9",
-              "name": "Adidas Superstar",
-              "brand": "Adidas",
-              "price": 85,
-              "description": "Classic sneaker with a distinctive shell toe design.",
-              "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
-              "category": "Women",
-              "sizes": [
-                5,
-                6,
-                7,
-                8,
-                9
-              ],
-              "colors": [
-                "White",
-                "Black",
-                "Gold"
-              ],
-              "rating": 4.7,
-              "bestseller": true,
-              "quantity": 1
-            }
-          ],
-          "amount": "85.00"
-        },
-        {
           "orderId": "ORD-1724316415977",
           "fullName": "sda",
           "address": "das",
