@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { handleAddCart } from "../Context/HandleCart";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { UserContext } from "../App";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../Redux/Slices/CartSlice";
 
 function ProductDetails() {
   const { fetchCart } = useContext(UserContext);
   const { id } = useParams();
   const [product, setproduct] = useState();
+  const dispacth=useDispatch()
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -23,8 +25,8 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  const addToCart = async (product) => {
-    await handleAddCart(product);
+  const addToCartt = async (product) => {
+    await dispacth(addToCart(product))
     await fetchCart();
   };
 
@@ -54,7 +56,7 @@ function ProductDetails() {
               <p>Rating : {product.rating}</p>
             </div>
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => addToCartt(product)}
               className="border-gray-300 border-2 p-3 shadow-lg w-full mt-6"
             >
               Add to Cart
