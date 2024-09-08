@@ -3,15 +3,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
-import { handleRemove } from "../Context/HandleCart";
+// import { handleRemove } from "../Context/HandleCart";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { UserContext } from "../App";
+import { useDispatch } from "react-redux";
+import { removeItem } from "../Redux/Slices/CartSlice";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState({});
   const [quantities, setQuantities] = useState({});
+  const dispacth=useDispatch()
   const navigate = useNavigate();
   const { fetchCart } = useContext(UserContext);
 
@@ -61,10 +64,10 @@ function Cart() {
     .reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0)
     .toFixed(2);
 
-  async function removeCart(item) {
+  async function removeCartt(item) {
     const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
     setCartItems(updatedCartItems);
-    await handleRemove(item);
+    dispacth(removeItem(item))
     await fetchCart();
   }
 
@@ -145,7 +148,7 @@ function Cart() {
                   </div>
                   <div>
                     <MdDelete
-                      onClick={() => removeCart(item)}
+                      onClick={() => removeCartt(item)}
                       className=" scale-150 cursor-pointer"
                     />
                   </div>

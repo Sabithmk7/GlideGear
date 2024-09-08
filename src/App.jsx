@@ -10,7 +10,6 @@ import MenPage from "./pages/MenPage";
 import WomenPage from "./pages/WomenPage";
 import Collection from "./pages/Collection";
 import axios from "axios";
-
 import Cart from "./components/Cart";
 import Checkout from "./pages/Checkout";
 import Contact from "./components/Contact";
