@@ -15,7 +15,7 @@ function AllUsers() {
       const res = await axios.get("http://localhost:3001/users");
       const nonAdminUsers = res.data.filter((user) => !user.admin);
       setUsers(nonAdminUsers);
-      setFilteredUsers(nonAdminUsers); 
+      setFilteredUsers(nonAdminUsers);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -28,11 +28,10 @@ function AllUsers() {
   }, []);
 
   useEffect(() => {
-    setFilteredUsers(
-      users.filter((user) =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    let filtere = users.filter((user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    setFilteredUsers(filtere);
   }, [searchQuery, users]);
 
   async function handleBlockUser(userId) {
@@ -77,14 +76,14 @@ function AllUsers() {
   return (
     <div className="p-4">
       <div className="flex justify-between">
-      <h2 className="text-2xl font-bold mb-4">All Users</h2>
-      <input
-        type="text"
-        placeholder="Search by name..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="mb-4 p-2 border border-gray-300 rounded "
-      />
+        <h2 className="text-2xl font-bold mb-4">All Users</h2>
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="mb-4 p-2 border border-gray-300 rounded "
+        />
       </div>
       {loading ? (
         <p className="text-center">Loading...</p>

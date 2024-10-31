@@ -6,10 +6,13 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../Redux/Slices/AuthSlice";
 
 function LoginPage() {
   const { users } = useContext(UserContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -20,35 +23,35 @@ function LoginPage() {
       email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string().required("Required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        const user = users.find(
-          (u) => u.email === values.email && u.password === values.password
-        );
-        if (user) {
-          if (user.blocked) {
-            toast.error("You are blocked");
-          } else if (user.admin === true) {
-            localStorage.setItem("id", user.id);
-            localStorage.setItem("role", user.admin);
-            toast.success("Admin logged in");
-            navigate("/admin/dashboard");
-          } else {
-            localStorage.setItem("id", user.id);
-            localStorage.setItem("name", user.name);
-            toast.success("Login successful!");
-            navigate("/");
-          }
+        // Dispatch loginUser and wait for the response
+        const response = await dispatch(loginUser({ email: values.email, password: values.password })).unwrap();
+        
+        // Show a success toast
+        toast.success("User logged in successfully");
+        console.log(response)
+        localStorage.setItem("id",response.data.id);
+        localStorage.setItem("role",response.data.role);
+        localStorage.setItem("token",response.data.token)
+
+        // Check the role from the response data and navigate accordingly
+        if (response.data.role === 'admin') {
+          navigate("/admin/dashboard");
         } else {
-          toast.error("Invalid email or password");
+          navigate('/');
         }
       } catch (error) {
-        console.log("Error fetching users:", error);
-        toast.error("Error fetching users");
+        // Handle errors based on the response
+        if (error.statusCode === 409) {
+          toast.warn(error.message);
+        } else {
+          toast.error(error.message || "Error logging in");
+        }
       }
-    },
+    }
+    
   });
-
 
   return (
     <div className="h-screen w-full bg-blue-500 flex justify-center items-center absolute top-0 z-50">

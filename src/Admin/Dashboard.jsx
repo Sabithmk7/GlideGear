@@ -12,6 +12,8 @@ function Dashboard() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalProfit, setTotalProfit] = useState(0);
 
+  
+
   useEffect(() => {
     const totalProductsCount = products.length;
     const userCount = users.filter((u) => !u.admin).length;

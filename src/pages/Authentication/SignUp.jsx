@@ -3,65 +3,59 @@ import { useNavigate } from "react-router-dom";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { toast } from "react-toastify";
-import { userAPI } from "../../Api";
-import { UserContext } from "../../App";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../Redux/Slices/AuthSlice";
 
 function SignUp() {
   const navigate = useNavigate();
-  const { users, setUsers } = useContext(UserContext);
+  const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
       confirmpassword: "",
-      admin: false,
-      blocked: false,
-      cart: [],
-      orders: []
     },
     validationSchema: Yup.object({
-      name: Yup.string().min(2, "Too short").required("Name is required"),
+      username: Yup.string().min(2, "Too short").required("Name is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string()
         .required("Please Enter your password")
-        .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-          "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
-        ),
+        .min(8,"Atleast 8 letter length"),
       confirmpassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm Password is required"),
     }),
     onSubmit: async (values) => {
-      if (isSubmitting) return; 
+      if (isSubmitting) return;
       setIsSubmitting(true);
-      const { confirmpassword, ...newData } = values;
-
+    
       try {
-        const isUser = users.find((u) => u.email === values.email);
-        if (isUser) {
-          toast.error("Email already in use");
-        } else {
-          const response = await axios.post(userAPI, newData);
-          const createdUser = response.data; 
-          setUsers((prevUsers) => [...prevUsers, createdUser]);
-          toast.success("Signup Successful");
-          navigate("/login");
-        }
+        await dispatch(
+          registerUser({
+            username: values.username,
+            email: values.email,
+            password: values.password,
+          })
+        ).unwrap();
+        toast.success("Registered successfully");
+        navigate("/login");
       } catch (error) {
-        console.error("Error creating user:", error);
-        toast.error("Error creating user");
+        if (error.statusCode === 409) {
+          toast.warn(error.message);
+        } else {
+          toast.error(error || "Error creating user");
+        }
       } finally {
         setIsSubmitting(false);
       }
     },
+    
   });
 
   return (
@@ -82,20 +76,20 @@ function SignUp() {
             <div className="flex flex-col gap-4">
               <input
                 type="text"
-                name="name"
-                placeholder="Name"
+                name="username"
+                placeholder="Username"
                 className={`border-b-2 p-2 focus:outline-none ${
-                  formik.touched.name && formik.errors.name
+                  formik.touched.username && formik.errors.username
                     ? "border-red-500"
                     : ""
                 }`}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.name}
+                value={formik.values.username}
               />
-              {formik.touched.name && formik.errors.name ? (
-                <p className="text-red-500 text-sm">{formik.errors.name}</p>
-              ) : null}
+              {formik.touched.username && formik.errors.username && (
+                <p className="text-red-500 text-sm">{formik.errors.username}</p>
+              )}
 
               <input
                 type="text"
@@ -110,9 +104,9 @@ function SignUp() {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               />
-              {formik.touched.email && formik.errors.email ? (
+              {formik.touched.email && formik.errors.email && (
                 <p className="text-red-500 text-sm">{formik.errors.email}</p>
-              ) : null}
+              )}
 
               <input
                 type="password"
@@ -127,9 +121,9 @@ function SignUp() {
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
               />
-              {formik.touched.password && formik.errors.password ? (
+              {formik.touched.password && formik.errors.password && (
                 <p className="text-red-500 text-sm">{formik.errors.password}</p>
-              ) : null}
+              )}
 
               <input
                 type="password"
@@ -146,11 +140,11 @@ function SignUp() {
                 value={formik.values.confirmpassword}
               />
               {formik.touched.confirmpassword &&
-              formik.errors.confirmpassword ? (
-                <p className="text-red-500 text-sm">
-                  {formik.errors.confirmpassword}
-                </p>
-              ) : null}
+                formik.errors.confirmpassword && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.confirmpassword}
+                  </p>
+                )}
 
               <div className="flex mt-10 items-center justify-between px-2">
                 <button
@@ -161,7 +155,8 @@ function SignUp() {
                   SignUp
                 </button>
                 <button
-                  onClick={() => navigate("/login")}
+                  type="button"
+                  // onClick={() => navigate("/login")}
                   className="text-blue-500"
                 >
                   LogIn

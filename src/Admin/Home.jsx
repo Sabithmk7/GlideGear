@@ -8,6 +8,7 @@ import EditProducts from "./EditProducts";
 import NotFound from "../components/NotFound";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const { url } = useParams();
@@ -15,17 +16,28 @@ const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  const { users } = useSelector((state) => state.user);
+const role=localStorage.getItem('role');
 
-  async function fetchUser() {
-    let userId = localStorage.getItem("id");
-    if (userId) {
-      let res = await axios.get(`http://localhost:3001/users/${userId}`);
-      if (res.data?.admin === true) setIsAdmin(true);
+  useEffect(()=>{
+    // console.log(users)
+    // const user=users?.find(u=>u.id==id)
+    // console.log(user)
+    if(role==='admin'){
+      setIsAdmin(true);
     }
-  }
+  })
+  // useEffect(() => {
+  //   fetchUser();
+  // }, []);
+
+  // async function fetchUser() {
+  //   let userId = localStorage.getItem("id");
+  //   if (userId) {
+  //     let res = await axios.get(`http://localhost:3001/users/${userId}`);
+  //     if (res.data?.admin === true) setIsAdmin(true);
+  //   }
+  // }
 
   const handleLogout = () => {
     Swal.fire({

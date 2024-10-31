@@ -1,63 +1,59 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { AddToCart } from "../Redux/Slices/CartSlice";
+import { toast } from 'react-toastify';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { UserContext } from "../App";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../Redux/Slices/CartSlice";
+import { fetchProductById } from "../Redux/Slices/ProductSlice";
 
 function ProductDetails() {
-  const { fetchCart } = useContext(UserContext);
   const { id } = useParams();
-  const [product, setproduct] = useState();
-  const dispacth=useDispatch()
+  const { error, cart } = useSelector((state) => state.cart);
+  const { product } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
 
+  console.log(cart)
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3001/products/${id}`);
-        setproduct(res.data);
-      } catch (error) {
-        console.error("Error fetching product details:", error);
-      }
-    };
-    fetchProduct();
-  }, [id]);
+    dispatch(fetchProductById(id));
+  }, [dispatch, id]);
 
-  const addToCartt = async (product) => {
-    await dispacth(addToCart(product))
-    await fetchCart();
+  // useEffect(() => {
+  //   if (error==null) {
+  //     toast.success("Added to cart succesfully")
+  //   }else{
+  //     toast.error(error); // Display the error message in a toast notification
+  //   }
+  // }, [error]);
+
+  const handleAddToCart = () => {
+    dispatch(AddToCart(product.id));
   };
 
-  if (!product) return <p>No Products available</p>;
+  if (!product) return <p className="text-center">No Products available</p>;
 
   return (
     <>
       <Navbar />
-      <div className="bg-gray-200 p-4 md:p-8 flex justify-center items-center">
-        <div className="h-auto md:h-[80vh] w-full md:w-[70vw] shadow-lg bg-gray-100 flex flex-col md:flex-row items-center justify-around p-4 md:p-8 gap-6">
-          <div className="w-full md:w-auto mb-4 md:mb-0">
+      <div className="bg-gray-50 p-4 md:p-8 flex justify-center items-center min-h-screen">
+        <div className="h-full w-full md:w-[80vw] lg:w-[70vw] bg-white shadow-lg flex flex-col md:flex-row items-center justify-between p-8 gap-6 rounded-lg border border-gray-200">
+          <div className="flex-shrink-0 w-full md:w-1/2 mb-4 md:mb-0">
             <img
-              className="shadow-lg h-[40vh] w-full md:h-[70vh] md:w-full object-contain "
-              src={product.image}
-              alt={product.name}
+              className="h-[60vh] w-full object-contain rounded-lg"
+              src={product.productImage}
+              alt={product.title}
             />
           </div>
-          <div className="w-full md:w-auto">
-            <h1 className="text-3xl md:text-4xl font-bold mb-1">
-              {product.name}
-            </h1>
-            <p>{product.description}</p>
-            <div className="mt-3 text-gray-500">
-              <p className="text-black">Price : $ {product.price}</p>
-              <p>Category : {product.category}</p>
-              <p>Color : {product.colors[0]}</p>
-              <p>Rating : {product.rating}</p>
+          <div className="flex-grow text-center md:text-left w-full md:w-1/2">
+            <h1 className="text-3xl md:text-4xl font-semibold mb-2">{product.title}</h1>
+            <p className="text-gray-700 mb-4">{product.description}</p>
+            <div className="text-gray-800 mb-4">
+              <p className="text-lg font-bold">Price: ${product.price}</p>
+              <p>Category: {product.category}</p>
             </div>
             <button
-              onClick={() => addToCartt(product)}
-              className="border-gray-300 border-2 p-3 shadow-lg w-full mt-6"
+              onClick={handleAddToCart}
+              className="bg-blue-600 text-white font-medium p-4 rounded hover:bg-blue-700 transition w-full md:w-auto"
             >
               Add to Cart
             </button>
