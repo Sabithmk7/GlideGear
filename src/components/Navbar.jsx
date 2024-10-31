@@ -15,7 +15,7 @@ function Navbar() {
   const [items, setItems] = useState([]);
   const [records, setRecords] = useState([]);
   const [query, setQuery] = useState("");
-  const { products, cartItems,setCartItems,fetchCart } = useContext(UserContext);
+  const { products, cartItems,setCartItems} = useContext(UserContext);
 
   useEffect(() => {
     setItems(products);
@@ -28,7 +28,7 @@ function Navbar() {
     if (userId) {
       setIsLoggedIn(true);
       setName(name);
-      fetchCart()
+      // fetchCart()  
     }
   }
 
@@ -105,13 +105,13 @@ function Navbar() {
                 </Link>
               </li>
               <li className="hover:text-black">
-                <Link to="/men" onClick={toggleMenu}>
+                <Link to="/products/Men" onClick={toggleMenu}>
                   MEN
                 </Link>
               </li>
               <li className="hover:text-black">
-                <Link to="/women" onClick={toggleMenu}>
-                  WOMEN
+                <Link to="/products/Female" onClick={toggleMenu}>
+                  FEMALE
                 </Link>
               </li>
               <li className="hover:text-black">

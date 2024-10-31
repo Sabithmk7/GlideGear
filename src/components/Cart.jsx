@@ -67,13 +67,11 @@ function Cart() {
   async function removeCartt(item) {
     const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
     setCartItems(updatedCartItems);
-    dispacth(removeItem(item))
+    // dispacth(removeItem(item))
     await fetchCart();
   }
 
   function handleCheckout() {
-    console.log(quantities);
-
     navigate("/checkout", {
       state: { cartItems, selectedSizes, quantities, totalPrice },
     });

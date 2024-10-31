@@ -11,6 +11,7 @@ import Footer from "../../components/Footer";
 function HomePage() {
   return (
     <>
+
       <Navbar />
       <HeroSection />
       <LogoSection />

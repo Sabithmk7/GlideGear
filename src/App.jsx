@@ -15,7 +15,10 @@ import Checkout from "./pages/Checkout";
 import Contact from "./components/Contact";
 import Order from "./pages/Order";
 import Home from "./Admin/Home";
-
+import { useDispatch } from "react-redux";
+import { fetchUsers } from "./Redux/Slices/UserSlice";
+import { fetchProducts } from "./Redux/Slices/ProductSlice";
+import FilteredProducts from "./pages/FilteredProducts";
 
 export const UserContext = createContext();
 
@@ -23,34 +26,39 @@ function App() {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  
-  useEffect(() => {
-    axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));
-  }, []);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/products")
-      .then((res) => setProducts(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));
+  // }, []);
 
-  async function fetchCart() {
-    const userId=localStorage.getItem("id")
-    if(userId){
-      try{
-        const res=await axios.get(`http://localhost:3001/users/${userId}`)
-        setCartItems(res.data.cart)
-      }
-      catch(error)
-      {
-        console.error("Failed to fetch cart items", error);
-      }
-    }
-  }
- 
-  useEffect(()=>{
-    fetchCart()
-  },[])
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:3001/products")
+  //     .then((res) => setProducts(res.data));
+  // }, []);
+
+  // async function fetchCart() {
+  //   const userId=localStorage.getItem("id")
+  //   if(userId){
+  //     try{
+  //       const res=await axios.get(`http://localhost:3001/users/${userId}`)
+  //       setCartItems(res.data.cart)
+  //     }
+  //     catch(error)
+  //     {
+  //       console.error("Failed to fetch cart items", error);
+  //     }
+  //   }
+  // }
+
+  // useEffect(()=>{
+  //   fetchCart()
+  // },[])
+  useEffect(() => {
+    dispatch(fetchUsers());
+    dispatch(fetchProducts());
+  }, []);
 
   return (
     <>
@@ -62,7 +70,7 @@ function App() {
           setProducts,
           cartItems,
           setCartItems,
-          fetchCart
+          // fetchCart
         }}
       >
         <Routes>
@@ -71,8 +79,10 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/men" element={<MenPage />} />
-          <Route path="/women" element={<WomenPage />} />
+          <Route path="/products/:category" element={<FilteredProducts />} />
+
+          {/* <Route path="/men" element={<MenPage />} /> */}
+          {/* <Route path="/women" element={<WomenPage />} /> */}
           <Route path="/collections" element={<Collection />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/contact" element={<Contact />} />

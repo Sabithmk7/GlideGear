@@ -1,176 +1,11 @@
 {
   "users": [
     {
-      "id": "f970",
-      "name": "Sabith",
-      "email": "admin@gmail.com",
-      "password": "Admin789!",
-      "admin": true,
-      "cart": [],
-      "orders": [
-        {
-          "orderId": "ORD-1724316415977",
-          "fullName": "sda",
-          "address": "das",
-          "city": "dwa",
-          "postalCode": 123443,
-          "phoneNumber": 1232131231,
-          "paymentMethod": "UPI",
-          "cartItems": [
-            {
-              "id": "9",
-              "name": "Adidas Superstar",
-              "brand": "Adidas",
-              "price": 85,
-              "description": "Classic sneaker with a distinctive shell toe design.",
-              "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
-              "category": "Women",
-              "sizes": [
-                5,
-                6,
-                7,
-                8,
-                9
-              ],
-              "colors": [
-                "White",
-                "Black",
-                "Gold"
-              ],
-              "rating": 4.7,
-              "bestseller": true,
-              "quantity": 1
-            },
-            {
-              "id": "13",
-              "name": "Nike ZoomX Vaporfly",
-              "brand": "Nike",
-              "price": 250,
-              "description": "High-performance racing shoe designed for speed and efficiency.",
-              "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/efcb2629-34c7-484a-9a76-86959a52b272/vaporfly-3-road-racing-shoes-wdmHPR.png",
-              "category": "Women",
-              "sizes": [
-                8,
-                9,
-                10,
-                11
-              ],
-              "colors": [
-                "Pink",
-                "Black",
-                "White"
-              ],
-              "rating": 4.9,
-              "quantity": 1
-            },
-            {
-              "id": "12",
-              "name": "Hoka Bondi 8",
-              "brand": "Hoka",
-              "price": 160,
-              "description": "Maximum cushioning running shoe for a plush and comfortable ride.",
-              "image": "https://dms.deckers.com/hoka/image/upload/f_auto,q_auto,dpr_auto/b_rgb:f7f7f9/w_483/v1721616147/catalog/images/transparent/1123202-WVR_1.png?_s=RAABAB0",
-              "category": "Women",
-              "sizes": [
-                6,
-                7,
-                8,
-                9
-              ],
-              "colors": [
-                "Purple",
-                "Blue",
-                "Pink"
-              ],
-              "rating": 4.8,
-              "quantity": 1
-            },
-            {
-              "id": "16",
-              "name": "Asics Gel-Kayano 28",
-              "brand": "Asics",
-              "price": 160,
-              "description": "High-performance running shoe with gel cushioning and stability.",
-              "image": "https://m.media-amazon.com/images/I/51W9B-BP62L._SX695_.jpg",
-              "category": "Women",
-              "sizes": [
-                8,
-                9,
-                10,
-                11,
-                12
-              ],
-              "colors": [
-                "Black",
-                "White",
-                "Blue"
-              ],
-              "rating": 4.8,
-              "quantity": 1
-            },
-            {
-              "id": "14",
-              "name": "New Balance 550",
-              "brand": "New Balance",
-              "price": 120,
-              "description": "Retro-inspired sneaker with premium materials and classic design.",
-              "image": "https://www.hypeelixir.com/cdn/shop/files/Untitled-1_0012s_0003_Layer836-828771.jpg?v=1712587557&width=2000",
-              "category": "Women",
-              "sizes": [
-                7,
-                8,
-                9,
-                10,
-                11
-              ],
-              "colors": [
-                "White",
-                "Beige",
-                "Black"
-              ],
-              "rating": 4.6,
-              "quantity": 1
-            }
-          ],
-          "amount": "775.00"
-        }
-      ],
-      "blocked": false
-    },
-    {
-      "cart": [
-        {
-          "id": "9",
-          "name": "Adidas Superstar",
-          "brand": "Adidas",
-          "price": 85,
-          "description": "Classic sneaker with a distinctive shell toe design.",
-          "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/v/s/-original-imah23c8zktpnhtb.jpeg?q=70",
-          "category": "Women",
-          "sizes": [
-            "5",
-            "6",
-            "7",
-            "8",
-            "9"
-          ],
-          "colors": [
-            "White",
-            "Black",
-            "Gold"
-          ],
-          "rating": 4.7,
-          "bestseller": true
-        }
-      ],
-      "id": "98be"
-    },
-    {
       "id": "fcc6",
       "name": "Sabith",
       "email": "s@gmail.com",
       "password": "Sabith789!",
-      "admin": false,
+      "admin": true,
       "blocked": false,
       "cart": [
         {
@@ -363,6 +198,36 @@
       "blocked": false,
       "cart": [],
       "orders": []
+    },
+    {
+      "id": "f525",
+      "name": "Sabith",
+      "email": "sss@gmail.com",
+      "password": "Sabith789!",
+      "admin": false,
+      "blocked": false,
+      "cart": [],
+      "orders": []
+    },
+    {
+      "id": "747e",
+      "name": "admin",
+      "email": "admin@gmail.com",
+      "password": "Admin789!",
+      "admin": false,
+      "blocked": false,
+      "cart": [],
+      "orders": []
+    },
+    {
+      "id": "5a5d",
+      "name": "dsad",
+      "email": "s1sd@gmail.com",
+      "password": "Sabith789!",
+      "admin": false,
+      "blocked": false,
+      "cart": [],
+      "orders": []
     }
   ],
   "products": [
@@ -410,28 +275,6 @@
       ],
       "rating": 4.7,
       "bestseller": true
-    },
-    {
-      "id": "10",
-      "name": "Vans Old Skool",
-      "brand": "Vans",
-      "price": "60",
-      "description": "Iconic skate shoe with a simple and stylish design.",
-      "image": "https://images.vans.com/is/image/Vans/VN000D3H_Y28_HERO?wid=1600&hei=1984&fmt=jpeg&qlt=90&resMode=sharp2&op_usm=0.9,1.7,8,0",
-      "category": "Men",
-      "sizes": [
-        6,
-        7,
-        8,
-        9,
-        10
-      ],
-      "colors": [
-        "Black",
-        "White",
-        "Checkerboard"
-      ],
-      "rating": 4.4
     },
     {
       "id": "11",
