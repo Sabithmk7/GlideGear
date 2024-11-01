@@ -1,50 +1,31 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
-// import { handleRemove } from "../Context/HandleCart";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { UserContext } from "../App";
-import { useDispatch } from "react-redux";
-import { removeItem } from "../Redux/Slices/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { DecreaseQty, fetchCart, IncreaseQty, removeItemFromCart } from "../Redux/Slices/CartSlice";
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState({});
   const [quantities, setQuantities] = useState({});
-  const dispacth=useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { fetchCart } = useContext(UserContext);
+  const { cart } = useSelector(state => state.cart);
+
+  const fetchData = async () => {
+    try {
+      dispatch(fetchCart());
+    } catch (error) {
+      console.error('Error occurred while fetching cart:', error);
+    }
+  };
 
   useEffect(() => {
-    displayCartItems();
+    fetchData();
   }, []);
-
-  async function displayCartItems() {
-    try {
-      const userId = localStorage.getItem("id");
-      if (userId) {
-        const res = await axios.get(`http://localhost:3001/users/${userId}`);
-        const cartList = res.data.cart;
-        setCartItems(cartList);
-        const initialSizes = {};
-        const initialQuantities = {};
-        cartList.forEach((item) => {
-          initialSizes[item.id] = item.sizes[0];
-          initialQuantities[item.id] = item.quantity || 1;
-        });
-        setSelectedSizes(initialSizes);
-        setQuantities(initialQuantities);
-      } else {
-        toast.warn("Please Login");
-      }
-    } catch (error) {
-      toast.warning("Something went wrong");
-      console.log(error);
-    }
-  }
 
   const handleSizeChange = (itemId, size) => {
     setSelectedSizes((prevSizes) => ({
@@ -53,29 +34,29 @@ function Cart() {
     }));
   };
 
-  const handleQuantityChange = (itemId, quantity) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [itemId]: quantity,
-    }));
-  };
+  // const handleQuantityChange = (itemId, delta) => {
+  //   setQuantities((prevQuantities) => {
+  //     const newQuantity = (prevQuantities[itemId] || 1) + delta;
+  //     return {
+  //       ...prevQuantities,
+  //       [itemId]: Math.max(newQuantity, 1), // Ensure quantity is at least 1
+  //     };
+  //   });
+  // };
 
-  const totalPrice = cartItems
-    .reduce((total, item) => total + item.price * (quantities[item.id] || 1), 0)
-    .toFixed(2);
+  // const totalPrice = cart.reduce((total, item) => total + item.price * (quantities[item.productId] || 1), 0).toFixed(2);
 
-  async function removeCartt(item) {
-    const updatedCartItems = cartItems.filter((v) => v.id !== item.id);
-    setCartItems(updatedCartItems);
-    // dispacth(removeItem(item))
-    await fetchCart();
+  async function removeCartItem(item) {
+    // This should dispatch a remove action to Redux, adjust as necessary
+    // dispatch(removeItem(item));
+    toast.success(`${item.productName} removed from cart!`);
   }
 
-  function handleCheckout() {
-    navigate("/checkout", {
-      state: { cartItems, selectedSizes, quantities, totalPrice },
-    });
-  }
+  // function handleCheckout() {
+  //   navigate("/checkout", {
+  //     state: { cart, selectedSizes, quantities, totalPrice },
+  //   });
+  // }
 
   return (
     <>
@@ -83,71 +64,51 @@ function Cart() {
       <div className="bg-gray-100 p-4 md:p-8 lg:p-16 flex flex-col md:flex-row gap-8">
         <div className="flex-1">
           <h1 className="text-2xl md:text-3xl font-bold mb-6">Your Cart</h1>
-          {cartItems.length === 0 ? (
+          {cart && cart.length === 0 ? (
             <p className="text-lg text-center">Your cart is empty</p>
           ) : (
             <ul className="space-y-6 flex flex-col">
-              {cartItems.map((item, index) => (
+              {cart.map((item) => (
                 <li
-                  key={index}
+                  key={item.productId}
                   className="flex flex-col md:flex-row items-center md:items-start justify-between bg-white shadow-lg p-4 md:w-full h-auto"
                 >
                   <img
                     className="w-48 h-48 object-cover"
-                    src={item.image}
-                    alt={item.name}
+                    src={item.productImage}
+                    alt={item.productName}
                   />
                   <div className="mt-4 md:mt-0 md:ml-6 flex flex-col gap-3 text-left flex-1">
-                    <h2 className="text-xl font-semibold">{item.name}</h2>
-                    <p className="text-gray-600 flex-grow">
-                      {item.description}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <label className="font-semibold">Size:</label>
-                      <select
-                        value={selectedSizes[item.id]}
-                        onChange={(e) =>
-                          handleSizeChange(item.id, e.target.value)
-                        }
-                        className="p-2 border-2"
-                      >
-                        {item.sizes.map((size, i) => (
-                          <option key={i} value={size}>
-                            {size}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <h2 className="text-xl font-semibold">{item.productName}</h2>
                     <div className="flex items-center gap-2">
                       <label className="font-semibold">Quantity:</label>
-                      <select
-                        value={quantities[item.id] || 1}
-                        onChange={(e) =>
-                          handleQuantityChange(item.id, e.target.value)
-                        }
-                        className="p-2 border-2"
-                      >
-                        {[...Array(10).keys()].map((num) => (
-                          <option key={num} value={num + 1}>
-                            {num + 1}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="flex items-center border border-gray-300 rounded">
+                        <button
+                          onClick={() => dispatch(DecreaseQty(item.productId))}
+                          className="p-2 text-xl font-bold text-gray-700 hover:bg-gray-200 rounded-l"
+                        >
+                          -
+                        </button>
+                        <span className="px-4 text-lg">{item.quantity}</span>
+                        <button
+                          onClick={() =>dispatch(IncreaseQty(item.productId))}
+                          className="p-2 text-xl font-bold text-gray-700 hover:bg-gray-200 rounded-r"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
-                    <p className="text-gray-600">
-                      <span className="text-black">Color:</span>{" "}
-                      {item.colors[0]}
-                    </p>
-                    <p>Rating: {item.rating}</p>
                     <p className="text-lg font-bold">
-                      Price: $
-                      {(item.price * (quantities[item.id] || 1)).toFixed(2)}
+                      Price: {item.price}
+                    </p>
+                    <p className="text-lg font-bold">
+                      TotalPrice: {item.totalAmount}
                     </p>
                   </div>
                   <div>
                     <MdDelete
-                      onClick={() => removeCartt(item)}
-                      className=" scale-150 cursor-pointer"
+                      onClick={() => dispatch(removeItemFromCart(item.productId))}
+                      className="scale-150 cursor-pointer"
                     />
                   </div>
                 </li>
@@ -156,15 +117,15 @@ function Cart() {
           )}
         </div>
 
-        {cartItems.length > 0 && (
+        {cart.length > 0 && (
           <div className="w-full md:w-1/3 lg:w-1/4 mt-16">
             <div className="bg-white shadow-lg p-6">
               <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
               <p className="border-b-2 border-gray-500 px-3 py-4 flex justify-between">
-                <span>Total</span> <span>${totalPrice}</span>
+                {/* <span>Total</span> <span>${}</span> */}
               </p>
               <button
-                onClick={handleCheckout}
+                // onClick={handleCheckout}
                 className="border-2 shadow-lg w-full h-12 mt-4 font-semibold"
               >
                 Checkout

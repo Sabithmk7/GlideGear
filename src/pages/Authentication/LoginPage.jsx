@@ -34,6 +34,8 @@ function LoginPage() {
         localStorage.setItem("id",response.data.id);
         localStorage.setItem("role",response.data.role);
         localStorage.setItem("token",response.data.token)
+        localStorage.setItem("name",response.data.name)
+        
 
         // Check the role from the response data and navigate accordingly
         if (response.data.role === 'admin') {
@@ -44,9 +46,9 @@ function LoginPage() {
       } catch (error) {
         // Handle errors based on the response
         if (error.statusCode === 409) {
-          toast.warn(error.message);
+          toast.warn(error.error);
         } else {
-          toast.error(error.message || "Error logging in");
+          toast.error(error.error || "Error logging in");
         }
       }
     }

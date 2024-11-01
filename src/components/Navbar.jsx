@@ -5,6 +5,7 @@ import { MdAccountCircle, MdMenu, MdClose } from "react-icons/md";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { UserContext } from "../App";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [show, setShow] = useState(false);
@@ -16,6 +17,7 @@ function Navbar() {
   const [records, setRecords] = useState([]);
   const [query, setQuery] = useState("");
   const { products, cartItems,setCartItems} = useContext(UserContext);
+  const{cart}=useSelector(state=>state.cart);
 
   useEffect(() => {
     setItems(products);
@@ -169,7 +171,7 @@ function Navbar() {
             <Link to="/cart" className="relative">
               <FaShoppingCart />
               <span className="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {cartItems.length}
+                {cart.length}
               </span>
             </Link>
             <div className="relative">
