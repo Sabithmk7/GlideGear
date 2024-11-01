@@ -35,6 +35,8 @@ function LoginPage() {
         localStorage.setItem("role",response.data.role);
         localStorage.setItem("token",response.data.token)
         localStorage.setItem("name",response.data.name)
+        localStorage.setItem("email",response.data.email)
+
         
 
         // Check the role from the response data and navigate accordingly

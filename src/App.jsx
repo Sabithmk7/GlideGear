@@ -15,7 +15,7 @@ import Checkout from "./pages/Checkout";
 import Contact from "./components/Contact";
 import Order from "./pages/Order";
 import Home from "./Admin/Home";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "./Redux/Slices/UserSlice";
 import { fetchProducts } from "./Redux/Slices/ProductSlice";
 import FilteredProducts from "./pages/FilteredProducts";
@@ -27,6 +27,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
+  // const{cart}=useSelector(state=>state.cart)
 
   // useEffect(() => {
   //   axios.get("http://localhost:3001/users").then((res) => setUsers(res.data));

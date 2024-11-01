@@ -44,7 +44,10 @@ function Cart() {
   //   });
   // };
 
-  // const totalPrice = cart.reduce((total, item) => total + item.price * (quantities[item.productId] || 1), 0).toFixed(2);
+  const totalPrice=cart?.reduce((acc,c)=>{
+    return acc+c.price*c.quantity;
+  },0)
+  console.log(totalPrice)
 
   async function removeCartItem(item) {
     // This should dispatch a remove action to Redux, adjust as necessary
@@ -52,11 +55,12 @@ function Cart() {
     toast.success(`${item.productName} removed from cart!`);
   }
 
-  // function handleCheckout() {
+  function handleCheckout() {
+    navigate('/checkout');
   //   navigate("/checkout", {
   //     state: { cart, selectedSizes, quantities, totalPrice },
   //   });
-  // }
+  }
 
   return (
     <>
@@ -122,10 +126,10 @@ function Cart() {
             <div className="bg-white shadow-lg p-6">
               <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
               <p className="border-b-2 border-gray-500 px-3 py-4 flex justify-between">
-                {/* <span>Total</span> <span>${}</span> */}
+                <span>Total</span> <span>${totalPrice}</span>
               </p>
               <button
-                // onClick={handleCheckout}
+                onClick={handleCheckout}
                 className="border-2 shadow-lg w-full h-12 mt-4 font-semibold"
               >
                 Checkout

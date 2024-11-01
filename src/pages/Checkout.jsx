@@ -1,269 +1,186 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+// Updated validation schema with required fields
 const validationSchema = yup.object({
-  fullName: yup.string().required("Full name is required"),
-  address: yup.string().required("Address is required"),
-  city: yup.string().required("City is required"),
-  postalCode: yup.string().required("Postal code is required").min(6, "Minimum 6 digits required").max(6, 'Maximum 6 digits'),
-  phoneNumber: yup.string().required("Phone number is required").min(10, 'Minimum 10 digits required').max(10, 'Maximum 10 digits'),
-  paymentMethod: yup.string().required("Payment method is required"),
+  CustomerName: yup.string().required("Customer name is required"),
+  CustomerEmail: yup.string().email("Invalid email format").required("Customer email is required"),
+  CustomerPhone: yup
+    .string()
+    .required("Customer phone is required")
+    .min(10, "Minimum 10 digits required")
+    .max(10, "Maximum 10 digits"),
+  CustomerCity: yup.string().required("Customer city is required"),
+  HomeAddress: yup.string().required("Home address is required"),
 });
 
 function Checkout() {
-  const location = useLocation();
-  const { cartItems, selectedSizes, quantities, totalPrice } = location.state;
-
-  const updatedCartItems = cartItems.map(item => ({
-    ...item,
-    quantity: quantities[item.id] || 1
-  }));
-
-  const [orders, setOrders] = useState([]);
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const userId = localStorage.getItem("id");
-        const res = await axios.get(`http://localhost:3001/users/${userId}`);
-        setOrders(res.data.orders || []);
-      } catch (error) {
-        console.error("Failed to fetch orders", error);
-      }
-    };
-    fetchOrders();
-  }, []);
-
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      address: "",
-      city: "",
-      postalCode: "",
-      phoneNumber: "",
-      paymentMethod: "",
+      CustomerName: "",
+      CustomerEmail: "",
+      CustomerPhone: "",
+      CustomerCity: "",
+      HomeAddress: "",
     },
     validationSchema,
     onSubmit: async (values) => {
-      const orderId = `ORD-${Date.now()}`;
-      const newOrder = {
-        orderId,
-        ...values,
-        cartItems: updatedCartItems,
-        amount: totalPrice,
-      };
-      try {
-        const userId = localStorage.getItem("id");
-        await axios.patch(`http://localhost:3001/users/${userId}`, {
-          orders: [...orders, newOrder],
-        });
-        setOrders(prevOrders => [...prevOrders, newOrder]); 
-        toast.success("Order Successful");
-        formik.resetForm();
-      } catch (error) {
-        console.error("Order failed", error);
-        toast.error("Order failed");
+      try{
+        
+      }catch(error){
+
       }
+      // try {
+      //   const userId = localStorage.getItem("id");
+      //   const orderId = `ORD-${Date.now()}`;
+      //   const newOrder = {
+      //     orderId,
+      //     ...values,
+      //   };
+        
+      //   await axios.patch(`http://localhost:3001/users/${userId}`, {
+      //     orders: [...orders, newOrder],
+      //   });
+        
+      //   toast.success("Order placed successfully!");
+      //   formik.resetForm();
+      // } catch (error) {
+      //   console.error("Order failed", error);
+      //   toast.error("Order failed");
+      // }
     },
   });
 
   return (
     <>
-    <Navbar/>
-    <div className="bg-gray-100 p-4 md:p-8 lg:p-16 flex flex-col lg:flex-row gap-8">
-      <div className="flex-1">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">Checkout Form</h1>
-        <form
-          className="bg-white shadow-lg p-6 space-y-6"
-          onSubmit={formik.handleSubmit}
-        >
-          <div>
-            <label htmlFor="fullName" className="block font-semibold">
-              Full Name
-            </label>
-            <input
-              id="fullName"
-              name="fullName"
-              type="text"
-              className="mt-2 p-2 border-2 w-full"
-              placeholder="Enter your full name"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.fullName}
-              required
-            />
-            {formik.touched.fullName && formik.errors.fullName ? (
-              <div className="text-red-500 text-sm">{formik.errors.fullName}</div>
-            ) : null}
-          </div>
-          <div>
-            <label htmlFor="address" className="block font-semibold">
-              Address
-            </label>
-            <input
-              id="address"
-              name="address"
-              type="text"
-              className="mt-2 p-2 border-2 w-full"
-              placeholder="Enter your address"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.address}
-              required
-            />
-            {formik.touched.address && formik.errors.address ? (
-              <div className="text-red-500 text-sm">{formik.errors.address}</div>
-            ) : null}
-          </div>
-          <div>
-            <label htmlFor="city" className="block font-semibold">
-              City
-            </label>
-            <input
-              id="city"
-              name="city"
-              type="text"
-              className="mt-2 p-2 border-2 w-full"
-              placeholder="Enter your city"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.city}
-              required
-            />
-            {formik.touched.city && formik.errors.city ? (
-              <div className="text-red-500 text-sm">{formik.errors.city}</div>
-            ) : null}
-          </div>
-          <div>
-            <label htmlFor="postalCode" className="block font-semibold">
-              Postal Code
-            </label>
-            <input
-              id="postalCode"
-              name="postalCode"
-              type="number"
-              className="mt-2 p-2 border-2 w-full"
-              placeholder="Enter your postal code"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.postalCode}
-              required
-            />
-            {formik.touched.postalCode && formik.errors.postalCode ? (
-              <div className="text-red-500 text-sm">{formik.errors.postalCode}</div>
-            ) : null}
-          </div>
-          <div>
-            <label htmlFor="phoneNumber" className="block font-semibold">
-              Phone Number
-            </label>
-            <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="number"
-              className="mt-2 p-2 border-2 w-full"
-              placeholder="Enter your phone number"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.phoneNumber}
-              required
-            />
-            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
-              <div className="text-red-500 text-sm">{formik.errors.phoneNumber}</div>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="block font-semibold">Payment Options:</span>
-            <div>
-              <input
-                id="paymentUpi"
-                name="paymentMethod"
-                type="radio"
-                value="UPI"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                checked={formik.values.paymentMethod === "UPI"}
-                required
-              />
-              <label htmlFor="paymentUpi" className="ml-2">
-                UPI
-              </label>
-            </div>
-            <div>
-              <input
-                id="paymentCard"
-                name="paymentMethod"
-                type="radio"
-                value="Card"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                checked={formik.values.paymentMethod === "Card"}
-                required
-              />
-              <label htmlFor="paymentCard" className="ml-2">
-                Card
-              </label>
-            </div>
-            <div>
-              <input
-                id="paymentAccount"
-                name="paymentMethod"
-                type="radio"
-                value="Account"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                checked={formik.values.paymentMethod === "Account"}
-                required
-              />
-              <label htmlFor="paymentAccount" className="ml-2">
-                Account
-              </label>
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full border-2 border-gray-400 shadow-lg py-2 font-semibold"
+      <Navbar />
+      <div className="bg-gray-100 p-4 md:p-8 lg:p-16 flex flex-col lg:flex-row gap-8">
+        <div className="flex-1">
+          <h1 className="text-2xl md:text-3xl font-bold mb-6">Checkout Form</h1>
+          <form
+            className="bg-white shadow-lg p-6 space-y-6"
+            onSubmit={formik.handleSubmit}
           >
-            Place Order
-          </button>
-        </form>
-      </div>
-
-      <div className="w-full md:w-1/3 lg:w-1/4">
-        <div className="bg-white shadow-lg p-6">
-          <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
-          <ul className="mt-4 space-y-4">
-            {updatedCartItems.map((item, index) => (
-              <li key={index} className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <img
-                    className="w-24 h-24 object-cover"
-                    src={item.image}
-                    alt={item.name}
-                  />
-                  <div>
-                    <h2 className="text-lg font-semibold">{item.name}</h2>
-                    <p className="text-gray-600">Size: {selectedSizes[item.id]}</p>
-                    <p className="text-gray-600">Color: {item.colors[0]}</p>
-                    <p className="text-gray-600">Quantity: {item.quantity}</p>
-                    <p className="text-lg font-bold">${item.price * item.quantity}</p>
-                  </div>
+            <div>
+              <label htmlFor="CustomerName" className="block font-semibold">
+                Customer Name
+              </label>
+              <input
+                id="CustomerName"
+                name="CustomerName"
+                type="text"
+                className="mt-2 p-2 border-2 w-full"
+                placeholder="Enter your name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.CustomerName}
+                required
+              />
+              {formik.touched.CustomerName && formik.errors.CustomerName ? (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.CustomerName}
                 </div>
-              </li>
-            ))}
-          </ul>
-          <p className="border-t-2 border-gray-500 px-3 py-4 flex justify-between">
-            <span>Total</span> <span>${totalPrice}</span>
-          </p>
+              ) : null}
+            </div>
+            <div>
+              <label htmlFor="CustomerEmail" className="block font-semibold">
+                Customer Email
+              </label>
+              <input
+                id="CustomerEmail"
+                name="CustomerEmail"
+                type="email"
+                className="mt-2 p-2 border-2 w-full"
+                placeholder="Enter your email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.CustomerEmail}
+                required
+              />
+              {formik.touched.CustomerEmail && formik.errors.CustomerEmail ? (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.CustomerEmail}
+                </div>
+              ) : null}
+            </div>
+            <div>
+              <label htmlFor="CustomerPhone" className="block font-semibold">
+                Customer Phone
+              </label>
+              <input
+                id="CustomerPhone"
+                name="CustomerPhone"
+                type="text"
+                className="mt-2 p-2 border-2 w-full"
+                placeholder="Enter your phone number"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.CustomerPhone}
+                required
+              />
+              {formik.touched.CustomerPhone && formik.errors.CustomerPhone ? (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.CustomerPhone}
+                </div>
+              ) : null}
+            </div>
+            <div>
+              <label htmlFor="CustomerCity" className="block font-semibold">
+                Customer City
+              </label>
+              <input
+                id="CustomerCity"
+                name="CustomerCity"
+                type="text"
+                className="mt-2 p-2 border-2 w-full"
+                placeholder="Enter your city"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.CustomerCity}
+                required
+              />
+              {formik.touched.CustomerCity && formik.errors.CustomerCity ? (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.CustomerCity}
+                </div>
+              ) : null}
+            </div>
+            <div>
+              <label htmlFor="HomeAddress" className="block font-semibold">
+                Home Address
+              </label>
+              <input
+                id="HomeAddress"
+                name="HomeAddress"
+                type="text"
+                className="mt-2 p-2 border-2 w-full"
+                placeholder="Enter your address"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.HomeAddress}
+                required
+              />
+              {formik.touched.HomeAddress && formik.errors.HomeAddress ? (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.HomeAddress}
+                </div>
+              ) : null}
+            </div>
+            <button
+              type="submit"
+              className="w-full border-2 border-gray-400 shadow-lg py-2 font-semibold"
+            >
+              Place Order
+            </button>
+          </form>
         </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 }
