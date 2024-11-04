@@ -8,8 +8,8 @@ export const fetchOrders=createAsyncThunk('order/fetchOrders',async()=>{
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         })
-        return res.data;
         console.log(res)
+        return res.data;
     }catch(error){
         console.log(error)
     }

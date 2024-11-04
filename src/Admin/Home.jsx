@@ -4,7 +4,7 @@ import AddProducts from "./AddProducts";
 import { VscThreeBars } from "react-icons/vsc";
 import Dashboard from "./Dashboard";
 import AllUsers from "./Users/AllUsers";
-import EditProducts from "./EditProducts";
+import EditProducts from "./ProductFucntion/EditProducts";
 import NotFound from "../components/NotFound";
 import Swal from "sweetalert2";
 import axios from "axios";

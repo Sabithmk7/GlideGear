@@ -18,12 +18,10 @@
         dispatch(fetchCart()); 
         console.log(res.data);
         toast.success("Item added to cart");  
-        return res.data; // This will be the fulfilled action payload
+        return res.data;
       } catch (error) {
-        // Use rejectWithValue to return a custom error message
 
         toast.warn(error.response.data.message);
-        // This can include specific data from the server
         return rejectWithValue(error.response.data.message);
       }
     }
@@ -38,7 +36,7 @@
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        return res.data.data; // Ensure this is the correct path to your data
+        return res.data.data; 
       } catch (error) {
         toast.warn(error.response?.data.message || 'Error fetching cart');
         return rejectWithValue(error.response?.data || 'Error fetching cart');
@@ -55,9 +53,9 @@
           },
         });
         dispatch(fetchCart());
-        console.log(res.data) // This will fetch the updated cart
+        console.log(res.data) 
         toast.success(res.data);
-        return res.data; // Assuming the response contains the updated cart data
+        return res.data; 
       } catch (error) {
         toast.warn(error.response.data.message);
         return rejectWithValue(error.response.data);
@@ -68,7 +66,7 @@
 
   
   export const IncreaseQty = createAsyncThunk(
-    'cart/increaseQty', // Ensure the action type is unique
+    'cart/increaseQty',
     async (pId, { dispatch, rejectWithValue }) => {
         try {
             const res = await axios.put(`https://localhost:7295/api/Cart/IncreaseQty/${pId}`, {}, {
@@ -77,7 +75,7 @@
                 },
             });
             
-            dispatch(fetchCart()); // Use dispatch here
+            dispatch(fetchCart()); 
             return res.data.data;
         } catch (error) {
             toast.warn(error.response.data.message);
@@ -87,7 +85,7 @@
 );
 
 export const DecreaseQty = createAsyncThunk(
-    'cart/decreaseQty', // Ensure the action type is unique
+    'cart/decreaseQty', 
     async (pId, { dispatch, rejectWithValue }) => {
         try {
             const res = await axios.put(`https://localhost:7295/api/Cart/DecreaseQty/${pId}`, {}, {
@@ -96,7 +94,6 @@ export const DecreaseQty = createAsyncThunk(
                 },
             });
             dispatch(fetchCart()); 
-            // Use dispatch here
             return res.data.data;
         } catch (error) {
             toast.warn(error.response.data.message);
@@ -122,16 +119,16 @@ export const DecreaseQty = createAsyncThunk(
           state.error = null; 
         })
         .addCase(AddToCart.rejected, (state, action) => {
-          state.error = action.payload; // Set the error to the payload returned from rejectWithValue
-          console.log(action.payload); // Log the error for debugging
+          state.error = action.payload; 
+          console.log(action.payload); 
         }).addCase(fetchCart.fulfilled, (state, action) => {
-          state.cart = action.payload  // Fallback to empty array
+          state.cart = action.payload  
           state.error = null;
         })
         .addCase(fetchCart.rejected, (state, action) => {
-          console.error(action.payload); // Log the error for debugging
-          state.cart = []; // Ensure cart is empty on error
-          state.error = action.payload; // Store error message if needed
+          console.error(action.payload);
+          state.cart = []; 
+          state.error = action.payload; 
         });
     },
   });

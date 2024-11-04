@@ -25,10 +25,10 @@ function LoginPage() {
     }),
     onSubmit: async (values) => {
       try {
-        // Dispatch loginUser and wait for the response
+ 
         const response = await dispatch(loginUser({ email: values.email, password: values.password })).unwrap();
         
-        // Show a success toast
+
         toast.success("User logged in successfully");
         console.log(response)
         localStorage.setItem("id",response.data.id);
@@ -39,14 +39,12 @@ function LoginPage() {
 
         
 
-        // Check the role from the response data and navigate accordingly
         if (response.data.role === 'admin') {
           navigate("/admin/dashboard");
         } else {
           navigate('/');
         }
       } catch (error) {
-        // Handle errors based on the response
         if (error.statusCode === 409) {
           toast.warn(error.error);
         } else {

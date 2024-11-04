@@ -15,7 +15,7 @@ function HomePage() {
       <Navbar />
       <HeroSection />
       <LogoSection />
-      <BestSeller />
+      {/* <BestSeller /> */}
       <AboutSection />
       <Shop/>
       <Footer/>

@@ -103,8 +103,8 @@ const Checkout = () => {
                   }
                 }
               );
-              navigate("/");
               toast.success("Order placed successfully!");
+              navigate("/");
             } catch (error) {
               console.error("Payment verification failed", error);
               toast.error("Payment verification failed. Please try again.");
