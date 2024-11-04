@@ -5,7 +5,8 @@ import { MdAccountCircle, MdMenu, MdClose } from "react-icons/md";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { UserContext } from "../App";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../Redux/Slices/CartSlice";
 
 function Navbar() {
   const [show, setShow] = useState(false);
@@ -18,8 +19,10 @@ function Navbar() {
   const [query, setQuery] = useState("");
   const { products, cartItems,setCartItems} = useContext(UserContext);
   const{cart}=useSelector(state=>state.cart);
+  const dispatch=useDispatch();
 
   useEffect(() => {
+    dispatch(fetchCart());
     setItems(products);
     setRecords(products);
   }, [products]);

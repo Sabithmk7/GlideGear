@@ -103,6 +103,7 @@ const Checkout = () => {
                   }
                 }
               );
+              navigate("/");
               toast.success("Order placed successfully!");
             } catch (error) {
               console.error("Payment verification failed", error);
@@ -121,7 +122,6 @@ const Checkout = () => {
 
         const razorpay = new window.Razorpay(options);
         razorpay.open();
-        navigate("/");
       } catch (error) {
         console.error("Error creating order", error);
         toast.error("Error creating order. Please try again.");

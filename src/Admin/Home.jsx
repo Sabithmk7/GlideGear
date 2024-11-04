@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import AddProducts from "./AddProducts";
 import { VscThreeBars } from "react-icons/vsc";
 import Dashboard from "./Dashboard";
-import AllUsers from "./AllUsers";
+import AllUsers from "./Users/AllUsers";
 import EditProducts from "./EditProducts";
 import NotFound from "../components/NotFound";
 import Swal from "sweetalert2";

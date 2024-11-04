@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "./Redux/Slices/UserSlice";
 import { fetchProducts } from "./Redux/Slices/ProductSlice";
 import FilteredProducts from "./pages/FilteredProducts";
+import UserDetails from "./Admin/Users/UserDetails";
 
 export const UserContext = createContext();
 
@@ -81,6 +82,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/products/:category" element={<FilteredProducts />} />
+          
 
           {/* <Route path="/men" element={<MenPage />} /> */}
           {/* <Route path="/women" element={<WomenPage />} /> */}
@@ -89,6 +91,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
           <Route path="admin/:url" element={<Home />} />
+          <Route path="admin/allusers/:userId" element={<UserDetails />} />
         </Routes>
       </UserContext.Provider>
       <ToastContainer position="bottom-right" />

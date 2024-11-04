@@ -11,7 +11,7 @@ const store = configureStore({
     auth: authReducer,
     user: userReducer,
     product:productReducer,
-    order:orderReducer
+    order:orderReducer,
   },
 });
 
