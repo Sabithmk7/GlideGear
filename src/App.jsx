@@ -20,6 +20,7 @@ import { fetchUsers } from "./Redux/Slices/UserSlice";
 import { fetchProducts } from "./Redux/Slices/ProductSlice";
 import FilteredProducts from "./pages/FilteredProducts";
 import UserDetails from "./Admin/Users/UserDetails";
+import WhishList from "./pages/WhishList";
 
 export const UserContext = createContext();
 
@@ -87,6 +88,7 @@ function App() {
           {/* <Route path="/men" element={<MenPage />} /> */}
           {/* <Route path="/women" element={<WomenPage />} /> */}
           <Route path="/collections" element={<Collection />} />
+          <Route path="/wishlist" element={<WhishList />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />

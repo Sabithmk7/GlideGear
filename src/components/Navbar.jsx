@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdAccountCircle, MdMenu, MdClose } from "react-icons/md";
-import { IoMdHeart } from "react-icons/io"; 
+import { IoMdHeart } from "react-icons/io";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { UserContext } from "../App";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../Redux/Slices/CartSlice";
+import { getWishList } from "../Redux/Slices/WishListSlice";
+import { search } from "../Redux/Slices/ProductSlice";
 
 function Navbar() {
   const [show, setShow] = useState(false);
@@ -15,18 +17,17 @@ function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [name, setName] = useState("");
   const navigate = useNavigate();
-  const [items, setItems] = useState([]);
-  const [records, setRecords] = useState([]);
   const [query, setQuery] = useState("");
-  const { products, cartItems, setCartItems } = useContext(UserContext);
-  const { cart } = useSelector(state => state.cart);
+  // const { products } = useContext(UserContext);
   const dispatch = useDispatch();
-
+  const records = useSelector((state) => state.product.search);
+  console.log(records);
+  const { cart } = useSelector((state) => state.cart);
+  console.log(records);
   useEffect(() => {
     dispatch(fetchCart());
-    setItems(products);
-    setRecords(products);
-  }, [products]);
+    dispatch(getWishList());
+  }, [dispatch]);
 
   async function fetchUser() {
     const name = localStorage.getItem("name");
@@ -44,7 +45,14 @@ function Navbar() {
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setQuery(value);
-    setRecords(items.filter((u) => u.name.toLowerCase().includes(value)));
+    if (value == undefined) {
+      dispatch(search(""));
+    }
+    if (value) {
+      dispatch(search(value));
+    } else {
+      dispatch(search(""));
+    }
   };
 
   const toggleMenu = () => {
@@ -64,10 +72,8 @@ function Navbar() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();
-        setCartItems([]);
         toast.warn("Logged Out");
         setIsLoggedIn(false);
-        setIsDropdownOpen(false);
         setName("");
         navigate("/");
       }
@@ -75,7 +81,7 @@ function Navbar() {
   };
 
   const handleDetails = () => {
-    setRecords([]);
+    dispatch(search(""));
   };
 
   const toggleDropdown = () => {
@@ -97,30 +103,63 @@ function Navbar() {
             {show ? <MdClose /> : <MdMenu />}
           </button>
         </div>
-        <div className={` ${show ? "block" : "hidden"} w-full md:w-auto md:flex md:items-center`}>
+        <div
+          className={`${
+            show ? "block" : "hidden"
+          } w-full md:w-auto md:flex md:items-center`}
+        >
           <ul className="flex flex-col md:flex-row gap-6 text-slate-400 font mt-4 md:mt-0">
             <li>
-              <NavLink to="/" className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")} onClick={toggleMenu}>
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  isActive ? "text-black font-bold" : "hover:text-black"
+                }
+                onClick={toggleMenu}
+              >
                 HOME
               </NavLink>
             </li>
             <li>
-              <NavLink to="/products/Men" className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")} onClick={toggleMenu}>
+              <NavLink
+                to="/products/Men"
+                className={({ isActive }) =>
+                  isActive ? "text-black font-bold" : "hover:text-black"
+                }
+                onClick={toggleMenu}
+              >
                 MEN
               </NavLink>
             </li>
             <li>
-              <NavLink to="/products/Female" className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")} onClick={toggleMenu}>
+              <NavLink
+                to="/products/Female"
+                className={({ isActive }) =>
+                  isActive ? "text-black font-bold" : "hover:text-black"
+                }
+                onClick={toggleMenu}
+              >
                 FEMALE
               </NavLink>
             </li>
             <li>
-              <NavLink to="/collections" className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")} onClick={toggleMenu}>
+              <NavLink
+                to="/products/All"
+                className={({ isActive }) =>
+                  isActive ? "text-black font-bold" : "hover:text-black"
+                }
+                onClick={toggleMenu}
+              >
                 ALL PRODUCTS
               </NavLink>
             </li>
             <li>
-              <NavLink to="/contact" className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")}>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  isActive ? "text-black font-bold" : "hover:text-black"
+                }
+              >
                 CONTACT
               </NavLink>
             </li>
@@ -143,7 +182,7 @@ function Navbar() {
                 <MdClose />
               </button>
             )}
-            {query && records.length > 0 && (
+            {query && records?.length > 0 && (
               <div className="absolute left-0 mt-2 z-10 bg-white border w-full max-h-[500px] overflow-auto border-gray-300 rounded shadow-lg">
                 {records.map((record) => (
                   <Link
@@ -152,12 +191,17 @@ function Navbar() {
                     to={`/product/${record.id}`}
                   >
                     <div className="p-4 w-full flex justify-between items-center rounded-md mb-2 bg-gray-50 hover:bg-gray-100 transition duration-300">
-                      <div className="text-lg font-medium text-black">
-                        {record.name}
+                      <div>
+                        <div className="text-lg font-medium text-black">
+                          {record.title}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          ${record.price}
+                        </div>
                       </div>
                       <img
-                        src={record.image}
-                        alt={record.name}
+                        src={record.productImage}
+                        alt={record.title}
                         className="w-[50px] h-[50px] object-cover rounded-md border border-gray-200"
                       />
                     </div>

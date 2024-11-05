@@ -29,10 +29,26 @@ export const fetchUserOrder=createAsyncThunk('order/fetchUserOrder',async(userId
     }
 })
 
+export const fetchyourOrder=createAsyncThunk('order/fetchyourOrder',async()=>{
+    try{
+        const res=await axios.get(`https://localhost:7295/api/Order/getOrderDetails`,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+        console.log(res.data)
+        return res.data;
+    }catch(error){
+        console.log(error)
+    }
+})
+
+
 
 const initialState={
     userOrder:[],
     adminOrderDetails:[],
+    yourOrder:[],
     error:null
 }
 
@@ -50,6 +66,8 @@ const orderSlice=createSlice({
             console.log(action.error)
         }).addCase(fetchUserOrder.fulfilled,(state,action)=>{
             state.userOrder=action.payload
+        }).addCase(fetchyourOrder.fulfilled,(state,action)=>{
+            state.yourOrder=action.payload;
         })
     }
 })

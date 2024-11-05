@@ -4,7 +4,6 @@ import axios from "axios";
 export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
   try {
     const res =await axios.get("https://localhost:7295/api/User/getusers");
-    console.log(res)
     return res.data;
   } catch (error) {
     console.log(error);
@@ -45,7 +44,6 @@ const userSlice=createSlice({
     extraReducers:(builder)=>{
         builder
         .addCase(fetchUsers.fulfilled,(state,action)=>{
-          console.log(action.payload)
             state.users=action.payload;
         })
         .addCase(fetchUserById.fulfilled,(state,action)=>{

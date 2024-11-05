@@ -1,30 +1,30 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { addProduct } from "../Redux/Slices/ProductSlice";
+import { toast } from "react-toastify";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
+  const fileInputRef = useRef(null); 
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
       price: "",
-      img: null,
+      image: null,
       categoryId: "",
     },
     onSubmit: (values) => {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      formData.append("image", values.img); 
-      formData.append("categoryId", values.categoryId);
-
-      dispatch(addProduct(formData));
-
-
+      dispatch(addProduct(values)).then(() => {
+        formik.resetForm();
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; 
+        }
+      }).then(() => {
+        toast.success("Product added successfully");
+      });
     },
   });
 
@@ -85,8 +85,8 @@ const AddProduct = () => {
           </label>
           <input
             type="file"
-            name="img"
-            onChange={(e) => formik.setFieldValue("img", e.target.files[0])}
+            name="image"
+            onChange={(e) => formik.setFieldValue("image", e.target.files[0])}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2"
             accept="image/*"
             required

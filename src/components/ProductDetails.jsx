@@ -13,7 +13,7 @@ function ProductDetails() {
   const { product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
-  console.log(cart)
+  // console.log(cart)
   useEffect(() => {
     dispatch(fetchProductById(id));
   }, [dispatch, id]);

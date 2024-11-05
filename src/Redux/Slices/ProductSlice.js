@@ -59,6 +59,7 @@ export const addProduct=createAsyncThunk('product/addProduct',async(values,{disp
       },
     })
     dispatch(fetchProducts())
+    
     console.log(res)
   }catch(error){
     console.log(error)
@@ -80,9 +81,20 @@ export const updateProduct=createAsyncThunk('product/updateProduct',async({produ
   }
 })
 
+
+export const search=createAsyncThunk('product/search',async(query)=>{
+  try{
+    const res=await axios.get(`https://localhost:7295/api/Product/search-item?search=${query}`);
+    return res.data;
+  }catch(error){
+    console.log(error)
+  }
+})
+
 const initialState = {
   products: [],
   filteredProducts: [],
+  search:[],
   product: null,
 };
 const ProductSlice = createSlice({
@@ -103,6 +115,8 @@ const ProductSlice = createSlice({
         state.product = action.payload;
       }).addCase(deleteProduct.fulfilled,(state,action)=>{
         console.log(action.payload)
+      }).addCase(search.fulfilled,(state,action)=>{
+        state.search=action.payload
       })
   },
 });

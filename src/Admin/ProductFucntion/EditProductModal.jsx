@@ -12,19 +12,11 @@ function EditProductModal({ product, closeModal }) {
       title: product.title,
       description: product.description,
       price: product.price,
-      img: null,
+      image: null,
       categoryId: product.categoryId,
     },
     onSubmit: (values) => {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      formData.append("categoryId", values.categoryId);
-      if (values.img) {
-        formData.append("image", values.img);
-      }
-      dispatch(updateProduct({ productId: product.id, values: formData }));
+      dispatch(updateProduct({ productId: product.id, values: values }));
       closeModal(); 
     },
   });
@@ -75,8 +67,8 @@ function EditProductModal({ product, closeModal }) {
             <label className="block text-sm font-medium text-gray-700">Image</label>
             <input
               type="file"
-              name="img"
-              onChange={(e) => formik.setFieldValue("img", e.target.files[0])}
+              name="image"
+              onChange={(e) => formik.setFieldValue("image", e.target.files[0])}
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
               accept="image/*"
             />
