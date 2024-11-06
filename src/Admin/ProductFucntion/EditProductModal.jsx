@@ -1,12 +1,12 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import {  updateProduct } from '../../Redux/Slices/ProductSlice';
-
+import { updateProduct } from '../../Redux/Slices/ProductSlice';
 
 function EditProductModal({ product, closeModal }) {
   const dispatch = useDispatch();
-
+  const { categories } = useSelector((state) => state.category);
+  
   const formik = useFormik({
     initialValues: {
       title: product.title,
@@ -16,7 +16,7 @@ function EditProductModal({ product, closeModal }) {
       categoryId: product.categoryId,
     },
     onSubmit: (values) => {
-      dispatch(updateProduct({ productId: product.id, values: values }));
+      dispatch(updateProduct({ productId: product.id, values }));
       closeModal(); 
     },
   });
@@ -75,15 +75,21 @@ function EditProductModal({ product, closeModal }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Category ID</label>
-            <input
-              type="number"
+            <label className="block text-sm font-medium text-gray-700">Category</label>
+            <select
               name="categoryId"
               value={formik.values.categoryId}
               onChange={formik.handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
               required
-            />
+            >
+              <option value="" >Select a category</option>
+              {categories.map((category) => (
+                <option key={category.categoryId} value={category.categoryId}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="flex justify-end mt-4">

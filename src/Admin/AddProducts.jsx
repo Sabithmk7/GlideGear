@@ -1,12 +1,14 @@
-import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { addProduct } from "../Redux/Slices/ProductSlice";
 import { toast } from "react-toastify";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
-  const fileInputRef = useRef(null); 
+  
+  // Get the categories from the Redux store
+  const { categories } = useSelector((state) => state.category);
 
   const formik = useFormik({
     initialValues: {
@@ -19,9 +21,6 @@ const AddProduct = () => {
     onSubmit: (values) => {
       dispatch(addProduct(values)).then(() => {
         formik.resetForm();
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""; 
-        }
       }).then(() => {
         toast.success("Product added successfully");
       });
@@ -95,17 +94,22 @@ const AddProduct = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Category ID
+            Category
           </label>
-          <input
-            type="number"
+          <select
             name="categoryId"
             value={formik.values.categoryId}
             onChange={formik.handleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2"
-            placeholder="Enter category ID"
             required
-          />
+          >
+            <option value="" >Select a category</option>
+            {categories && categories.map((category) => (
+              <option key={category.categoryId} value={category.categoryId}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button

@@ -6,6 +6,7 @@ import productReducer from "../Slices/ProductSlice"
 import orderReducer from "../Slices/OrderSlice"
 import dashboardReducer from "../Slices/DashboardSlice"
 import wishlistReducer from "../Slices/WishListSlice"
+import categoryReducer from "../Slices/CategorySlice"
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     product:productReducer,
     order:orderReducer,
     dashboard:dashboardReducer,
-    wishlist:wishlistReducer
+    wishlist:wishlistReducer,
+    category:categoryReducer
   },
 });
 

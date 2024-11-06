@@ -12,7 +12,7 @@ export const getWishList=createAsyncThunk('wishlist/getWishlist',async()=>{
         
         return res.data
     }catch(error){
-        console.log(error)
+        toast.error(error.message)
     }
 })
 
@@ -24,10 +24,9 @@ export const addRemoveWishlist=createAsyncThunk('wishlist/addRemoveWishlist',asy
             },
         })
         dispatch(getWishList())
-        toast.success(res.data)
         return res.data;
     }catch(error){
-        console.log(error)
+        toast.error(error.message)
     }
 })
 
@@ -42,9 +41,9 @@ const wishlistSlice=createSlice({
     extraReducers:(builder)=>{
         builder
         .addCase(getWishList.fulfilled,(state,action)=>{
-            state.wishlistItems=action.payload
+            state.wishlistItems=action.payload.data
         }).addCase(addRemoveWishlist.fulfilled,(state,action)=>{
-            state.message=action.payload
+            state.message=action.payload.message
         })
     }
 })

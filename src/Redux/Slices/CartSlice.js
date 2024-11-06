@@ -2,8 +2,8 @@
   import axios from "axios";
   import { toast } from "react-toastify";
 
-  export const AddToCart = createAsyncThunk(
-    "cart/addtocart",
+  export const addToCart = createAsyncThunk(
+    "cart/addToCart",
     async (id, { dispatch,rejectWithValue }) => {
       try {
         const res = await axios.post(
@@ -12,7 +12,7 @@
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
+              },  
             }
         );
         dispatch(fetchCart()); 
@@ -20,7 +20,6 @@
         toast.success("Item added to cart");  
         return res.data;
       } catch (error) {
-
         toast.warn(error.response.data.message);
         return rejectWithValue(error.response.data.message);
       }
@@ -114,11 +113,11 @@ export const DecreaseQty = createAsyncThunk(
     initialState,
     extraReducers: (builder) => {
       builder
-        .addCase(AddToCart.fulfilled, (state, action) => {
+        .addCase(addToCart.fulfilled, (state, action) => {
           // state.cart.push(action.payload) ;
           state.error = null; 
         })
-        .addCase(AddToCart.rejected, (state, action) => {
+        .addCase(addToCart.rejected, (state, action) => {
           state.error = action.payload; 
           console.log(action.payload); 
         }).addCase(fetchCart.fulfilled, (state, action) => {

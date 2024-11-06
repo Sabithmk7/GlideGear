@@ -1,16 +1,28 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchOrders } from '../../Redux/Slices/OrderSlice'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders } from '../../Redux/Slices/OrderSlice';
+import { useNavigate } from 'react-router-dom';
+import { fetchUsers } from '../../Redux/Slices/UserSlice';
 
 function AllUsers() {
-  const { users } = useSelector((state) => state.user)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const { users } = useSelector((state) => state.user);
+  const [filteredUser, setFilteredUser] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchOrders())
-  }, [dispatch])
+    dispatch(fetchUsers());
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
+  useEffect(() => {
+   
+    if (users) {
+      setFilteredUser(users.filter(u => u.role !== 'admin'));
+    }
+  }, [users]); 
+
+  // console.log(filteredUser);
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
@@ -28,7 +40,7 @@ function AllUsers() {
             </tr>
           </thead>
           <tbody>
-            {users.map((u) => (
+            {filteredUser.map((u) => (
               <tr key={u?.id} className="border-t border-gray-300 hover:bg-gray-50">
                 <td className="py-3 px-6">{u?.id}</td>
                 <td className="py-3 px-6">{u?.userName}</td>
@@ -47,7 +59,7 @@ function AllUsers() {
         </table>
       </div>
     </div>
-  )
+  );
 }
 
-export default AllUsers
+export default AllUsers;

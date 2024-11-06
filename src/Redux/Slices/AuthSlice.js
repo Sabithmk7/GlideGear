@@ -1,6 +1,7 @@
 // authSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
@@ -30,54 +31,46 @@ export const registerUser = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
-      }
-      return rejectWithValue(error.message);
+      toast.error()
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const logoutUser = createAsyncThunk("auth/logout", async () => {
-  const response = await axios.get("https://localhost:7295/api/Auth/logout", {
-    withCredentials: true,
-  });
-  return response.data;
-});
-
 const initialState = {
-  userStatus: false,
-  status: "idle",
+  registerData: null,
+  loginStatus: false,
   error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
+  reducers: {
+    logout: (state) => {
+      state.loginStatus = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = "success";
-        state.userStatus = true;
+        state.loginStatus = true;
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload; 
+        state.error = action.payload;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.status = action.payload;
+        state.registerData = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.status = action.payload.message || "Error creating user"; 
-        state.error = action.payload || action.error.message;
-      })
-
-      .addCase(logoutUser.fulfilled, (state, action) => {
-        state.status = action.payload;
-        state.userStatus = false;
+        console.log(action.error.message);
+        state.registerData=action.error;
       });
   },
 });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

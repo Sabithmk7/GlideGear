@@ -14,7 +14,7 @@ export const categorizeProducts = createAsyncThunk(
     const res =await  axios.get(
       `https://localhost:7295/api/Product/getByCategory?categoryName=${category}`
     );
-    console.log(res.data);
+    // console.log(res.data);
     return res.data;
   }
 );

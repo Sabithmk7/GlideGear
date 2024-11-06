@@ -33,25 +33,26 @@ function EditProducts() {
       {products.length === 0 ? (
         <p className="text-center text-lg text-gray-600">No products available. Please add some!</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {products.map((product) => (
             <div 
               key={product.id} 
-              className="bg-white shadow-xl rounded-lg overflow-hidden p-4 transition-transform transform hover:scale-105 cursor-pointer" 
+              className="bg-white shadow-md rounded-lg overflow-hidden transition transform hover:shadow-lg hover:-translate-y-1 cursor-pointer"
               onClick={() => handleCardClick(product)} 
             >
               <img 
                 src={product.productImage} 
                 alt={product.title} 
-                className="w-full h-40 object-cover mb-4 rounded-md" 
+                className="w-full h-48 object-cover mb-4 rounded-t-lg" 
               />
-              <h2 className="text-lg font-semibold text-gray-800">{product.title}</h2>
-              <p className="text-lg font-bold text-blue-600 mt-2">₹{product.price}</p>
-              
+              <div className="px-4 py-2">
+                <h2 className="text-lg font-semibold text-gray-900 truncate">{product.title}</h2>
+                <p className="text-xl font-semibold text-green-600 mt-2">₹{product.price}</p>
+              </div>
 
-              <div className="flex justify-between mt-4">
+              <div className="flex justify-between px-4 py-3 border-t border-gray-200 bg-gray-50">
                 <button
-                  className="flex-1 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition mr-2" 
+                  className="w-full py-2 text-sm font-semibold text-white bg-indigo-500 rounded-l-lg hover:bg-indigo-600 transition-all"
                   onClick={(e) => {
                     e.stopPropagation(); 
                     handleEditClick(product);
@@ -64,7 +65,7 @@ function EditProducts() {
                     e.stopPropagation(); 
                     dispatch(deleteProduct(product.id));
                   }}
-                  className="flex-1 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition ml-2" 
+                  className="w-full py-2 text-sm font-semibold text-white bg-red-500 rounded-r-lg hover:bg-red-600 transition-all"
                 >
                   Delete
                 </button>
@@ -81,7 +82,6 @@ function EditProducts() {
         />
       )}
 
-   
       {productDetail && (
         <ProductDetailModal
           product={productDetail}

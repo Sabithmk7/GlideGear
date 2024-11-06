@@ -59,7 +59,7 @@ function App() {
   //   fetchCart()
   // },[])
   useEffect(() => {
-    dispatch(fetchUsers());
+    // dispatch(fetchUsers());
     dispatch(fetchProducts());
   }, []);
 

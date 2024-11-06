@@ -6,60 +6,28 @@ import { MdDelete } from "react-icons/md";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { DecreaseQty, fetchCart, IncreaseQty, removeItemFromCart } from "../Redux/Slices/CartSlice";
+import {
+  DecreaseQty,
+  fetchCart,
+  IncreaseQty,
+  removeItemFromCart,
+} from "../Redux/Slices/CartSlice";
 
 function Cart() {
-  const [selectedSizes, setSelectedSizes] = useState({});
-  const [quantities, setQuantities] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cart } = useSelector(state => state.cart);
-
-  const fetchData = async () => {
-    try {
-      dispatch(fetchCart());
-    } catch (error) {
-      console.error('Error occurred while fetching cart:', error);
-    }
-  };
+  const { cart } = useSelector((state) => state.cart);
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchCart());
   }, []);
 
-  const handleSizeChange = (itemId, size) => {
-    setSelectedSizes((prevSizes) => ({
-      ...prevSizes,
-      [itemId]: size,
-    }));
-  };
-
-  // const handleQuantityChange = (itemId, delta) => {
-  //   setQuantities((prevQuantities) => {
-  //     const newQuantity = (prevQuantities[itemId] || 1) + delta;
-  //     return {
-  //       ...prevQuantities,
-  //       [itemId]: Math.max(newQuantity, 1), // Ensure quantity is at least 1
-  //     };
-  //   });
-  // };
-
-  const totalPrice=cart?.reduce((acc,c)=>{
-    return acc+c.price*c.quantity;
-  },0)
-  console.log(totalPrice)
-
-  async function removeCartItem(item) {
-    // This should dispatch a remove action to Redux, adjust as necessary
-    // dispatch(removeItem(item));
-    toast.success(`${item.productName} removed from cart!`);
-  }
+  const totalPrice = cart?.reduce((acc, c) => {
+    return acc + c.price * c.quantity;
+  }, 0);
 
   function handleCheckout() {
-    navigate('/checkout');
-  //   navigate("/checkout", {
-  //     state: { cart, selectedSizes, quantities, totalPrice },
-  //   });
+    navigate("/checkout");
   }
 
   return (
@@ -75,64 +43,72 @@ function Cart() {
               {cart.map((item) => (
                 <li
                   key={item.productId}
-                  className="flex flex-col md:flex-row items-center md:items-start justify-between bg-white shadow-lg p-4 md:w-full h-auto"
+                  className="flex flex-col md:flex-row items-center md:items-start justify-between bg-white shadow-md rounded-lg p-6 border border-gray-200"
                 >
                   <img
-                    className="w-48 h-48 object-cover"
+                    className="w-40 h-40 object-cover rounded-lg"
                     src={item.productImage}
                     alt={item.productName}
                   />
-                  <div className="mt-4 md:mt-0 md:ml-6 flex flex-col gap-3 text-left flex-1">
-                    <h2 className="text-xl font-semibold">{item.productName}</h2>
+                  <div className="mt-4 md:mt-0 md:ml-6 flex flex-col gap-2 flex-1">
+                    <h2 className="text-xl font-semibold text-gray-800">
+                      {item.productName}
+                    </h2>
                     <div className="flex items-center gap-2">
-                      <label className="font-semibold">Quantity:</label>
-                      <div className="flex items-center border border-gray-300 rounded">
+                      <label className="font-semibold text-gray-600">Quantity:</label>
+                      <div className="flex items-center border border-gray-300 rounded-md">
                         <button
                           onClick={() => dispatch(DecreaseQty(item.productId))}
-                          className="p-2 text-xl font-bold text-gray-700 hover:bg-gray-200 rounded-l"
+                          className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-l-md"
                         >
                           -
                         </button>
-                        <span className="px-4 text-lg">{item.quantity}</span>
+                        <span className="px-4">{item.quantity}</span>
                         <button
-                          onClick={() =>dispatch(IncreaseQty(item.productId))}
-                          className="p-2 text-xl font-bold text-gray-700 hover:bg-gray-200 rounded-r"
+                          onClick={() => dispatch(IncreaseQty(item.productId))}
+                          className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-r-md"
                         >
                           +
                         </button>
                       </div>
                     </div>
-                    <p className="text-lg font-bold">
-                      Price: {item.price}
-                    </p>
-                    <p className="text-lg font-bold">
-                      TotalPrice: {item.totalAmount}
+                    <p className="text-lg text-gray-700">Price: ₹{item.price}</p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      Total: ₹{item.totalAmount}
                     </p>
                   </div>
-                  <div>
-                    <MdDelete
-                      onClick={() => dispatch(removeItemFromCart(item.productId))}
-                      className="scale-150 cursor-pointer"
-                    />
-                  </div>
+                  <MdDelete
+                    onClick={() => dispatch(removeItemFromCart(item.productId))}
+                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                    size={24}
+                  />
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        {cart.length > 0 && (
-          <div className="w-full md:w-1/3 lg:w-1/4 mt-16">
-            <div className="bg-white shadow-lg p-6">
-              <h1 className="text-2xl md:text-3xl px-3">Summary</h1>
-              <p className="border-b-2 border-gray-500 px-3 py-4 flex justify-between">
-                <span>Total</span> <span>${totalPrice}</span>
-              </p>
+        {cart && cart.length > 0 && (
+          <div className="w-full md:w-1/3 lg:w-1/4">
+            <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200">
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">Summary</h2>
+              <div className="border-b pb-4 mb-4 text-gray-700">
+                <p className="flex justify-between">
+                  <span>Subtotal</span> <span>₹{totalPrice}</span>
+                </p>
+                <p className="flex justify-between mt-2">
+                  <span>Shipping</span>
+                  <span className="text-green-600 font-semibold">Free</span>
+                </p>
+              </div>
+              <div className="flex justify-between text-xl font-bold mb-4 text-gray-800">
+                <span>Total</span> <span>₹{totalPrice}</span>
+              </div>
               <button
                 onClick={handleCheckout}
-                className="border-2 shadow-lg w-full h-12 mt-4 font-semibold"
+                className="w-full py-3 text-white bg-blue-950 hover:bg-blue-900 rounded-md font-semibold transition-colors duration-200"
               >
-                Checkout
+                Proceed to Checkout
               </button>
             </div>
           </div>

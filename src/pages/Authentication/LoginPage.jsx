@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../App";
 import loginBg from "../../assets/loginshoe.jpeg";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,10 +8,11 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../Redux/Slices/AuthSlice";
 
+
 function LoginPage() {
-  const { users } = useContext(UserContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
 
   const formik = useFormik({
     initialValues: {
@@ -27,10 +27,7 @@ function LoginPage() {
       try {
  
         const response = await dispatch(loginUser({ email: values.email, password: values.password })).unwrap();
-        
-
         toast.success("User logged in successfully");
-        console.log(response)
         localStorage.setItem("id",response.data.id);
         localStorage.setItem("role",response.data.role);
         localStorage.setItem("token",response.data.token)

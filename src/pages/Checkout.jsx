@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { fetchCart } from '../Redux/Slices/CartSlice';
 
 
 const loadScript = (src) => {
@@ -18,6 +19,7 @@ const loadScript = (src) => {
   });
 };
 const Checkout = () => {
+  const dispatch=useDispatch();
   const navigate=useNavigate();
   const [raz, setRaz] = useState(null);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
@@ -104,6 +106,7 @@ const Checkout = () => {
                 }
               );
               toast.success("Order placed successfully!");
+              dispatch(fetchCart());
               navigate("/");
             } catch (error) {
               console.error("Payment verification failed", error);

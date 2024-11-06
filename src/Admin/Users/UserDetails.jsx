@@ -7,9 +7,9 @@ import { fetchUserOrder } from '../../Redux/Slices/OrderSlice';
 function UserDetails() {
     const { userId } = useParams();
     const dispatch = useDispatch();
-    const { userById,status } = useSelector(state => state.user);
+    const { userById } = useSelector(state => state.user);
     const { userOrder } = useSelector(state => state.order);
-    console.log(status)
+  
     
     useEffect(() => {
         dispatch(fetchUserById(userId));
@@ -29,16 +29,16 @@ function UserDetails() {
                     <p><strong>Email:</strong> {userById?.email}</p>
                     <p><strong>User ID:</strong> {userById?.id}</p>
                     <p><strong>Username:</strong> {userById?.userName}</p>
-                    <p><strong>Status:</strong> <span className={`text-sm font-semibold ${status?.isBlocked  ? 'text-red-500' : 'text-green-500'}`}>
-                        {status?.isBlocked ? "Blocked" : "Active"}
+                    <p><strong>Status:</strong> <span className={`text-sm font-semibold ${userById?.isBlocked  ? 'text-red-500' : 'text-green-500'}`}>
+                        {userById?.isBlocked ? "Blocked" : "Active"}
                     </span></p>
                 </div>
                 <button 
                     onClick={()=>handleBlockUnblock(userById?.id)}
                     className={`mt-6 px-6 py-2 rounded-lg font-semibold transition duration-200 ease-in-out 
-                        ${status?.isBlocked ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}`}
+                        ${userById?.isBlocked ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}`}
                 >
-                    {status?.isBlocked ? "Unblock User" : "Block User"}
+                    {userById?.isBlocked ? "Unblock User" : "Block User"}
                 </button>
             </div>
 

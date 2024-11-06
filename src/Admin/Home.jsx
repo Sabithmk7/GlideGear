@@ -7,38 +7,26 @@ import AllUsers from "./Users/AllUsers";
 import EditProducts from "./ProductFucntion/EditProducts";
 import NotFound from "../components/NotFound";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { fetchCategories } from "../Redux/Slices/CategorySlice";
+
 
 const Home = () => {
   const { url } = useParams();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const dispatch=useDispatch()
 
-  const { users } = useSelector((state) => state.user);
 const role=localStorage.getItem('role');
 
   useEffect(()=>{
-    // console.log(users)
-    // const user=users?.find(u=>u.id==id)
-    // console.log(user)
     if(role==='admin'){
+      dispatch(fetchCategories())
       setIsAdmin(true);
     }
-  })
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
-
-  // async function fetchUser() {
-  //   let userId = localStorage.getItem("id");
-  //   if (userId) {
-  //     let res = await axios.get(`http://localhost:3001/users/${userId}`);
-  //     if (res.data?.admin === true) setIsAdmin(true);
-  //   }
-  // }
-
+  },[])
+ 
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",

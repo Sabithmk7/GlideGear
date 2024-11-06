@@ -13,7 +13,6 @@ export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
 export const fetchUserById = createAsyncThunk("user/fetchUserById", async (userId) => {
   try {
     const res =await axios.get(`https://localhost:7295/api/User/${userId}`);
-    console.log(res.data)
     return res.data.data;
   } catch (error) {
     console.log(error);
@@ -21,10 +20,10 @@ export const fetchUserById = createAsyncThunk("user/fetchUserById", async (userI
 });
 
 
-export const blockOrUnblock=createAsyncThunk('user/blockOrUnblock',async(userId)=>{
+export const blockOrUnblock=createAsyncThunk('user/blockOrUnblock',async(userId,{dispatch})=>{
   try{
     const res=await axios.patch(`https://localhost:7295/api/User/blockorUnblock/${userId}`,{}); 
-    console.log(res.data.data)
+    dispatch(fetchUserById(userId))
     return res.data.data;
   }catch(error){
     console.log(error)
@@ -47,7 +46,7 @@ const userSlice=createSlice({
             state.users=action.payload;
         })
         .addCase(fetchUserById.fulfilled,(state,action)=>{
-          console.log(action.payload)
+          // console.log(action.payload)
           state.userById=action.payload
         }).addCase(blockOrUnblock.fulfilled,(state,action)=>{
           state.status=action.payload;

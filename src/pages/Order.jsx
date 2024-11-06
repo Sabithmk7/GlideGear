@@ -46,7 +46,7 @@ function Order() {
                         <p className="text-sm text-gray-600">Qty: {order.quantity}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-base font-semibold">${order.totalPrice}</p>
+                        <p className="text-base font-semibold">₹{order.totalPrice}</p>
                       </div>
                     </li>
                   </ul>

@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdAccountCircle, MdMenu, MdClose } from "react-icons/md";
 import { IoMdHeart } from "react-icons/io";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { UserContext } from "../App";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../Redux/Slices/CartSlice";
 import { getWishList } from "../Redux/Slices/WishListSlice";
 import { search } from "../Redux/Slices/ProductSlice";
+import { logout } from "../Redux/Slices/AuthSlice";
 
 function Navbar() {
   const [show, setShow] = useState(false);
@@ -18,25 +18,26 @@ function Navbar() {
   const [name, setName] = useState("");
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  // const { products } = useContext(UserContext);
   const dispatch = useDispatch();
-  const records = useSelector((state) => state.product.search);
-  console.log(records);
-  const { cart } = useSelector((state) => state.cart);
-  console.log(records);
-  useEffect(() => {
-    dispatch(fetchCart());
-    dispatch(getWishList());
-  }, [dispatch]);
+  const records = useSelector((state) => state.product.search); // Search results from redux
+  const { cart } = useSelector((state) => state.cart); // Cart from redux
+  const { loginStatus } = useSelector((state) => state.auth); // Login status from redux
 
-  async function fetchUser() {
+  useEffect(() => {
+    if (loginStatus) {
+      dispatch(fetchCart());
+      dispatch(getWishList());
+    }
+  }, [dispatch, loginStatus]);
+
+  const fetchUser = () => {
     const name = localStorage.getItem("name");
     const userId = localStorage.getItem("id");
     if (userId) {
       setIsLoggedIn(true);
       setName(name);
     }
-  }
+  };
 
   useEffect(() => {
     fetchUser();
@@ -45,19 +46,10 @@ function Navbar() {
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setQuery(value);
-    if (value == undefined) {
-      dispatch(search(""));
-    }
-    if (value) {
-      dispatch(search(value));
-    } else {
-      dispatch(search(""));
-    }
+    dispatch(search(value || "")); // Dispatch search query, empty string if value is empty
   };
 
-  const toggleMenu = () => {
-    setShow(!show);
-  };
+  const toggleMenu = () => setShow(!show);
 
   const handleLogout = () => {
     Swal.fire({
@@ -76,21 +68,14 @@ function Navbar() {
         setIsLoggedIn(false);
         setName("");
         navigate("/");
+        dispatch(logout());
       }
     });
   };
 
-  const handleDetails = () => {
-    dispatch(search(""));
-  };
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const closeDropdown = () => {
-    setIsDropdownOpen(false);
-  };
+  const closeDropdown = () => setIsDropdownOpen(false);
 
   return (
     <nav className="bg-white shadow-md p-4 sticky top-0 z-50">
@@ -103,18 +88,12 @@ function Navbar() {
             {show ? <MdClose /> : <MdMenu />}
           </button>
         </div>
-        <div
-          className={`${
-            show ? "block" : "hidden"
-          } w-full md:w-auto md:flex md:items-center`}
-        >
+        <div className={`${show ? "block" : "hidden"} w-full md:w-auto md:flex md:items-center`}>
           <ul className="flex flex-col md:flex-row gap-6 text-slate-400 font mt-4 md:mt-0">
             <li>
               <NavLink
                 to="/"
-                className={({ isActive }) =>
-                  isActive ? "text-black font-bold" : "hover:text-black"
-                }
+                className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")}
                 onClick={toggleMenu}
               >
                 HOME
@@ -123,9 +102,7 @@ function Navbar() {
             <li>
               <NavLink
                 to="/products/Men"
-                className={({ isActive }) =>
-                  isActive ? "text-black font-bold" : "hover:text-black"
-                }
+                className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")}
                 onClick={toggleMenu}
               >
                 MEN
@@ -134,9 +111,7 @@ function Navbar() {
             <li>
               <NavLink
                 to="/products/Female"
-                className={({ isActive }) =>
-                  isActive ? "text-black font-bold" : "hover:text-black"
-                }
+                className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")}
                 onClick={toggleMenu}
               >
                 FEMALE
@@ -145,9 +120,7 @@ function Navbar() {
             <li>
               <NavLink
                 to="/products/All"
-                className={({ isActive }) =>
-                  isActive ? "text-black font-bold" : "hover:text-black"
-                }
+                className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")}
                 onClick={toggleMenu}
               >
                 ALL PRODUCTS
@@ -156,9 +129,7 @@ function Navbar() {
             <li>
               <NavLink
                 to="/contact"
-                className={({ isActive }) =>
-                  isActive ? "text-black font-bold" : "hover:text-black"
-                }
+                className={({ isActive }) => (isActive ? "text-black font-bold" : "hover:text-black")}
               >
                 CONTACT
               </NavLink>
@@ -185,19 +156,11 @@ function Navbar() {
             {query && records?.length > 0 && (
               <div className="absolute left-0 mt-2 z-10 bg-white border w-full max-h-[500px] overflow-auto border-gray-300 rounded shadow-lg">
                 {records.map((record) => (
-                  <Link
-                    onClick={handleDetails}
-                    key={record.id}
-                    to={`/product/${record.id}`}
-                  >
+                  <Link key={record.id} to={`/product/${record.id}`} onClick={toggleMenu}>
                     <div className="p-4 w-full flex justify-between items-center rounded-md mb-2 bg-gray-50 hover:bg-gray-100 transition duration-300">
                       <div>
-                        <div className="text-lg font-medium text-black">
-                          {record.title}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          ${record.price}
-                        </div>
+                        <div className="text-lg font-medium text-black">{record.title}</div>
+                        <div className="text-sm text-gray-500">${record.price}</div>
                       </div>
                       <img
                         src={record.productImage}
@@ -271,4 +234,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Navbar

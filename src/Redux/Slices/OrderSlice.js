@@ -8,7 +8,7 @@ export const fetchOrders=createAsyncThunk('order/fetchOrders',async()=>{
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         })
-        console.log(res)
+        // console.log(res)
         return res.data;
     }catch(error){
         console.log(error)
@@ -22,7 +22,7 @@ export const fetchUserOrder=createAsyncThunk('order/fetchUserOrder',async(userId
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         })
-        console.log(res.data)
+        // console.log(res.data)
         return res.data.data;
     }catch(error){
         console.log(error)
@@ -36,7 +36,7 @@ export const fetchyourOrder=createAsyncThunk('order/fetchyourOrder',async()=>{
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         })
-        console.log(res.data)
+        // console.log(res.data)
         return res.data;
     }catch(error){
         console.log(error)
@@ -58,10 +58,10 @@ const orderSlice=createSlice({
     extraReducers:(builder)=>{
         builder
         .addCase(fetchOrders.pending,(state,action)=>{
-            console.log("loading")
+            // console.log("loading")
         }).addCase(fetchOrders.fulfilled,(state,action)=>{
             state.adminOrderDetails=action.payload
-            console.log(action.payload)
+            // console.log(action.payload)
         }).addCase(fetchOrders.rejected,(state,action)=>{
             console.log(action.error)
         }).addCase(fetchUserOrder.fulfilled,(state,action)=>{

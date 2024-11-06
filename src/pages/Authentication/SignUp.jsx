@@ -10,7 +10,6 @@ import { registerUser } from "../../Redux/Slices/AuthSlice";
 function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -26,15 +25,12 @@ function SignUp() {
         .required("Email is required"),
       password: Yup.string()
         .required("Please Enter your password")
-        .min(8,"Atleast 8 letter length"),
+        .min(8, "Atleast 8 letter length"),
       confirmpassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm Password is required"),
     }),
     onSubmit: async (values) => {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
-    
       try {
         await dispatch(
           registerUser({
@@ -51,11 +47,8 @@ function SignUp() {
         } else {
           toast.error(error || "Error creating user");
         }
-      } finally {
-        setIsSubmitting(false);
       }
     },
-    
   });
 
   return (
@@ -150,13 +143,13 @@ function SignUp() {
                 <button
                   type="submit"
                   className="hover:bg-blue-600 bg-blue-500 text-white h-10 w-24"
-                  disabled={isSubmitting}
+                  // disabled={isSubmitting}
                 >
                   SignUp
                 </button>
                 <button
                   type="button"
-                  // onClick={() => navigate("/login")}
+                  onClick={() => navigate("/login")}
                   className="text-blue-500"
                 >
                   LogIn

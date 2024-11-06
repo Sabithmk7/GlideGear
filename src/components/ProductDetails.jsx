@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AddToCart } from "../Redux/Slices/CartSlice";
+import { addToCart } from "../Redux/Slices/CartSlice";
 import { toast } from 'react-toastify';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -26,8 +26,8 @@ function ProductDetails() {
   //   }
   // }, [error]);
 
-  const handleAddToCart = () => {
-    dispatch(AddToCart(product.id));
+  const handleaddToCart = () => {
+    dispatch(addToCart(product.id));
   };
 
   if (!product) return <p className="text-center">No Products available</p>;
@@ -52,7 +52,7 @@ function ProductDetails() {
               <p>Category: {product.category}</p>
             </div>
             <button
-              onClick={handleAddToCart}
+              onClick={handleaddToCart}
               className="bg-blue-600 text-white font-medium p-4 rounded hover:bg-blue-700 transition w-full md:w-auto"
             >
               Add to Cart
