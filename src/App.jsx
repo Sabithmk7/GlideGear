@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,25 +9,26 @@ import ProductDetails from "./components/ProductDetails";
 // import MenPage from "./pages/MenPage";
 // import WomenPage from "./pages/WomenPage";
 import Collection from "./pages/Collection";
-import axios from "axios";
+// import axios from "axios";
 import Cart from "./components/Cart";
 import Checkout from "./pages/Checkout";
 import Contact from "./components/Contact";
 import Order from "./pages/Order";
 import Home from "./Admin/Home";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "./Redux/Slices/UserSlice";
+import { useDispatch } from "react-redux";
+// import { fetchUsers } from "./Redux/Slices/UserSlice";
 import { fetchProducts } from "./Redux/Slices/ProductSlice";
 import FilteredProducts from "./pages/FilteredProducts";
 import UserDetails from "./Admin/Users/UserDetails";
 import WhishList from "./pages/WhishList";
+import ScrollToTop from "./components/ScrollToTop";
 
-export const UserContext = createContext();
+// export const UserContext = createContext();
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
+  // const [users, setUsers] = useState([]);
+  // const [products, setProducts] = useState([]);
+  // const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
   // const{cart}=useSelector(state=>state.cart)
 
@@ -61,21 +62,12 @@ function App() {
   useEffect(() => {
     // dispatch(fetchUsers());
     dispatch(fetchProducts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
-      <UserContext.Provider
-        value={{
-          users,
-          setUsers,
-          products,
-          setProducts,
-          cartItems,
-          setCartItems,
-          // fetchCart
-        }}
-      >
+      {/* <UserContext.Provider> */}
+      <ScrollToTop/>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -83,7 +75,6 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/products/:category" element={<FilteredProducts />} />
-          
 
           {/* <Route path="/men" element={<MenPage />} /> */}
           {/* <Route path="/women" element={<WomenPage />} /> */}
@@ -95,7 +86,7 @@ function App() {
           <Route path="admin/:url" element={<Home />} />
           <Route path="admin/allusers/:userId" element={<UserDetails />} />
         </Routes>
-      </UserContext.Provider>
+      {/* </UserContext.Provider> */}
       <ToastContainer position="bottom-right" />
     </>
   );

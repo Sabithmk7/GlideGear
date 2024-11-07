@@ -20,7 +20,6 @@ function Collection() {
   const handleWishlist = (productId) => {
     dispatch(addRemoveWishlist(productId));
     dispatch(getWishList());
-    console.log(wishlist);
   };
 
   const isProductInWishlist = (productId) => {

@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { blockOrUnblock, fetchUserById } from '../../Redux/Slices/UserSlice';
 import { fetchUserOrder } from '../../Redux/Slices/OrderSlice';
 
 function UserDetails() {
     const { userId } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate(); 
     const { userById } = useSelector(state => state.user);
     const { userOrder } = useSelector(state => state.order);
-  
     
     useEffect(() => {
         dispatch(fetchUserById(userId));
@@ -20,9 +20,19 @@ function UserDetails() {
         dispatch(blockOrUnblock(userId));
     };
 
+    const handleGoBack = () => {
+        navigate(-1); 
+    };
+
     return (
         <div className="p-6 bg-gray-50 rounded-lg shadow-lg space-y-8">
-            {/* User Details Section */}
+            <button 
+                onClick={handleGoBack} 
+                className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-200"
+            >
+                ← Back
+            </button>
+
             <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">User Details</h2>
                 <div className="space-y-2">
@@ -34,7 +44,7 @@ function UserDetails() {
                     </span></p>
                 </div>
                 <button 
-                    onClick={()=>handleBlockUnblock(userById?.id)}
+                    onClick={() => handleBlockUnblock(userById?.id)}
                     className={`mt-6 px-6 py-2 rounded-lg font-semibold transition duration-200 ease-in-out 
                         ${userById?.isBlocked ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}`}
                 >
@@ -42,7 +52,7 @@ function UserDetails() {
                 </button>
             </div>
 
-            {/* User Orders Section */}
+
             <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200">
                 <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">User Orders</h3>
                 {userOrder.length === 0 ? (
